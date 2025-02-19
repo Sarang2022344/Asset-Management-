@@ -12,6 +12,8 @@ private long assetId;
 @Column(nullable = false)
     private String name ;
 
+@ManyToOne
+@JoinColumn(name="category_id")
 private Category category;
 
     public long getAssetId() {
