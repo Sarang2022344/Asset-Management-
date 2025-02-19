@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @Table(name="employee")
 @RequiredArgsConstructor
-@NoArgsConstructor
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
