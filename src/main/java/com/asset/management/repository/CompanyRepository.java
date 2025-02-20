@@ -1,3 +1,4 @@
+
 package com.asset.management.repository;
 
 import com.asset.management.model.Company;
@@ -11,3 +12,4 @@ public interface CompanyRepository extends JpaRepository<Company,Long> {
 
 
 }
+

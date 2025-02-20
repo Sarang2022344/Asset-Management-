@@ -18,7 +18,8 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    public User( String username) {
+    public User(Integer userId, String username) {
+        this.userId = userId;
         this.username = username;
     }
 }
