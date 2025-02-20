@@ -1,7 +1,8 @@
 package com.asset.management.service;
 
 import com.asset.management.dto.AssetDisposalDTO;
-import com.asset.management.dto.BulkAssetDisposalDTO;
+import com.asset.management.exception.AssetAlreadyDisposedException;
+import com.asset.management.exception.ResourceNotFoundException;
 import com.asset.management.model.AssetDisposal;
 import com.asset.management.model.AssetRegistration;
 import com.asset.management.model.Company;
@@ -56,14 +57,15 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
     @Override
     public AssetDisposalDTO disposeAsset(AssetDisposalDTO disposalDTO) {
         AssetRegistration asset = assetRepository.findById(disposalDTO.getAssetId())
-                .orElseThrow(() -> new IllegalArgumentException("Asset not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found with ID: " + disposalDTO.getAssetId()));
 
         if ("Disposed".equalsIgnoreCase(asset.getStatus())) {
-            throw new IllegalStateException("This asset has already been disposed and cannot be disposed again.");
+            throw new AssetAlreadyDisposedException("This asset has already been disposed and cannot be disposed again.");
         }
 
         Company company = companyRepository.findById(disposalDTO.getCompanyId())
-                .orElseThrow(() -> new IllegalArgumentException("Company not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found with ID: " + disposalDTO.getCompanyId()));
+
 
 //        Updating the asset status in the AssetRegistration
         asset.setStatus("Disposed");
@@ -114,42 +116,6 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         );
     }
 
-//    @Override
-//    public List<AssetDisposalDTO> disposeAssetsInBulk(BulkAssetDisposalDTO bulkDisposalDTO) {
-//        List<AssetRegistration> assets = assetRepository.findByAssetIdIn(bulkDisposalDTO.getAssetIds());
-//
-//        if (assets.isEmpty()) {
-//            throw new IllegalArgumentException("No valid assets found for disposal.");
-//        }
-//
-//        Company company = companyRepository.findById(bulkDisposalDTO.getCompanyId())
-//                .orElseThrow(() -> new IllegalArgumentException("Company not found"));
-//
-//        List<AssetDisposal> disposals = assets.stream().map(asset -> {
-//            if ("Disposed".equalsIgnoreCase(asset.getStatus())) {
-//                throw new IllegalStateException("Asset ID " + asset.getAssetId() + " has already been disposed.");
-//            }
-//
-//            asset.setStatus("Disposed");
-//            assetRepository.save(asset);
-//
-//            return AssetDisposal.builder()
-//                    .asset(asset)
-//                    .company(company)
-//                    .disposalDate(bulkDisposalDTO.getDisposalDate())
-//                    .reason(bulkDisposalDTO.getReason())
-//                    .build();
-//        }).collect(Collectors.toList());
-//
-//        disposalRepository.saveAll(disposals);
-//
-//        return disposals.stream().map(disposal -> new AssetDisposalDTO(
-//                disposal.getDisposalId(),
-//                disposal.getAsset().getAssetId(),
-//                disposal.getCompany().getCompanyId(),
-//                disposal.getDisposalDate(),
-//                disposal.getReason()
-//        )).collect(Collectors.toList());
-//    }
+
 
 }
