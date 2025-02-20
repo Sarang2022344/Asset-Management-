@@ -12,4 +12,5 @@ public interface AssetAllocationRepository extends JpaRepository<AssetAllocation
     Optional<AssetAllocation> findByAsset_AssetId(Long assetId);
     List<AssetAllocation> findAllByAsset_AssetId(Long assetId);
     List<AssetAllocation> findByStatus(String status);
+//    Optional<AssetAllocation> findByEmployee_EmployeeIdAndAsset_Category(Long employeeId, String assetCategory);
 }

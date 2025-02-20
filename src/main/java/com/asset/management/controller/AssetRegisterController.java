@@ -3,6 +3,7 @@ package com.asset.management.controller;
 import com.asset.management.model.AssetRegistration;
 import com.asset.management.service.AssetRegistrationServiceImpl;
 import com.asset.management.service.CategoryServiceImpl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,6 +54,13 @@ private final AssetRegistrationServiceImpl asssetRegistration;
                 licenses, licenseExpiryDate, version, supportedOs, imageFiles
         );
     }
+
+    @PostMapping("/uploadFile")
+    public ResponseEntity<String> uploadCSV(@RequestParam("file") MultipartFile file) {
+        asssetRegistration.saveAssetsFromCSV(file);
+        return ResponseEntity.ok("CSV file uploaded and assets saved successfully!");
+    }
+
 
 
 

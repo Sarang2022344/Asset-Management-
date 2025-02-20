@@ -1,6 +1,8 @@
 package com.asset.management.service;
 
 import com.asset.management.dto.AssetDisposalDTO;
+import com.asset.management.exception.AssetAlreadyDisposedException;
+import com.asset.management.exception.ResourceNotFoundException;
 import com.asset.management.model.AssetDisposal;
 import com.asset.management.model.AssetRegistration;
 import com.asset.management.model.Company;
@@ -8,6 +10,9 @@ import com.asset.management.repository.AssetDisposalRepository;
 import com.asset.management.repository.AssetRegistrationRepository;
 import com.asset.management.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AssetDisposalServiceImpl implements AssetDisposalService {
@@ -22,13 +27,49 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
     }
 
     @Override
+    public List<AssetDisposalDTO> getAllDisposals() {
+        List<AssetDisposal> disposals = disposalRepository.findAll();
+        return disposals.stream().map(disposal ->
+                new AssetDisposalDTO(
+                        disposal.getDisposalId(),
+                        disposal.getAsset().getAssetId(),
+                        disposal.getCompany().getCompanyId(),
+                        disposal.getDisposalDate(),
+                        disposal.getReason()
+                )
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public AssetDisposalDTO getDisposalById(Long disposalId) {
+        AssetDisposal disposal = disposalRepository.findById(disposalId)
+                .orElseThrow(() -> new RuntimeException("Asset Disposal not found"));
+
+        return new AssetDisposalDTO(
+                disposal.getDisposalId(),
+                disposal.getAsset().getAssetId(),
+                disposal.getCompany().getCompanyId(),
+                disposal.getDisposalDate(),
+                disposal.getReason()
+        );
+    }
+
+    @Override
     public AssetDisposalDTO disposeAsset(AssetDisposalDTO disposalDTO) {
         AssetRegistration asset = assetRepository.findById(disposalDTO.getAssetId())
-                .orElseThrow(() -> new IllegalArgumentException("Asset not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found with ID: " + disposalDTO.getAssetId()));
+
+        if ("Disposed".equalsIgnoreCase(asset.getStatus())) {
+            throw new AssetAlreadyDisposedException("This asset has already been disposed and cannot be disposed again.");
+        }
 
         Company company = companyRepository.findById(disposalDTO.getCompanyId())
-                .orElseThrow(() -> new IllegalArgumentException("Company not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found with ID: " + disposalDTO.getCompanyId()));
 
+
+//        Updating the asset status in the AssetRegistration
+        asset.setStatus("Disposed");
+        assetRepository.save(asset);
         AssetDisposal disposal = AssetDisposal.builder()
                 .asset(asset)
                 .company(company)
@@ -74,5 +115,7 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
                 disposal.getReason()
         );
     }
+
+
 
 }

@@ -4,9 +4,12 @@ import com.asset.management.model.*;
 import com.asset.management.repository.CategoryRepository;
 import com.asset.management.repository.AssetRegistrationRepository;
 import com.asset.management.repository.CompanyRepository;
+import com.asset.management.util.FileStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import com.asset.management.util.CSVHelper;
 
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -88,12 +91,21 @@ private final CompanyRepository companyrepository;
         return assetrepository.save(asset);
     }
 
-
-
     private String generateUniqueBarcode() {
         return "ASSET-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
+    public void saveAssetsFromCSV(MultipartFile file) {
+        if (!CSVHelper.hasCSVFormat(file)) {
+            throw new RuntimeException("Invalid CSV file format.");
+        }
+        try {
+            List<AssetRegistration> assets = CSVHelper.csvToAssets(new InputStreamReader(file.getInputStream()));
+            assetrepository.saveAll(assets);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to store CSV data: " + e.getMessage());
+        }
+    }
 
 
 
