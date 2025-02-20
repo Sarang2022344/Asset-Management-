@@ -3,10 +3,9 @@ package com.asset.management.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
-
 import java.time.LocalDate;
 import java.util.List;
-
+import java.util.UUID;
 
 @Entity
 @Table(name="asset")
@@ -44,13 +43,10 @@ private LocalDate warrantyStartDate;
 private LocalDate warrantyRenewalDate;
 
 
-
-    // One asset can have only one hardware detail
     @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private HardwareDetails hardwareDetails;
 
-    //  One asset can have only one software detail
     @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private SoftwareDetails softwareDetails;
