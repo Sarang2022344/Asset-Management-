@@ -1,5 +1,6 @@
 package com.asset.management.service;
 
+import com.asset.management.exception.NoAssignedAssetsException;
 import com.asset.management.model.AssetAllocation;
 import com.asset.management.model.AssetRegistration;
 import com.asset.management.model.Employee;
@@ -11,6 +12,7 @@ import com.asset.management.repository.AssetRegistrationRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +26,44 @@ public class AssetAllocationServiceImpl implements AssetAllocationService {
                                       AssetRegistrationRepository assetRepository) {
         this.allocationRepository = allocationRepository;
         this.assetRepository = assetRepository;
+    }
+
+    public List<AssetAllocation> getAllAllocations() {
+        return allocationRepository.findAll();
+    }
+
+
+    public List<AssetAllocation> getAllocationHistory(Long assetId) {
+        return allocationRepository.findAllByAsset_AssetId(assetId);
+    }
+
+
+    public String returnAsset(Long allocationId, LocalDate returnedDate/*, String reason*/) {
+        Optional<AssetAllocation> allocationOptional = allocationRepository.findById(allocationId);
+        if (allocationOptional.isEmpty()) {
+            return "Allocation record not found!";
+        }
+
+        AssetAllocation allocation = allocationOptional.get();
+        if (!"Assigned".equals(allocation.getStatus())) {
+            return "Asset is not currently assigned!";
+        }
+
+        allocation.setStatus("Returned");
+        allocation.setReturnedDate(returnedDate);
+//        allocation.setReason(reason);
+        allocationRepository.save(allocation);
+
+        return "Asset successfully returned.";
+    }
+
+    @Override
+    public List<AssetAllocation> getAllAssignedAssets() {
+        List<AssetAllocation> assignedAssets = allocationRepository.findByStatus("Assigned");
+        if (assignedAssets.isEmpty()) {
+            throw new NoAssignedAssetsException("No assets are currently assigned.");
+        }
+        return assignedAssets;
     }
 
     @Override
