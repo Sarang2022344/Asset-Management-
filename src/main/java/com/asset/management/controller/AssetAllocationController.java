@@ -1,8 +1,11 @@
 package com.asset.management.controller;
 
+import com.asset.management.model.AssetAllocation;
 import com.asset.management.service.AssetAllocationService;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -14,6 +17,33 @@ public class AssetAllocationController {
     public AssetAllocationController(AssetAllocationService assetAllocationService) {
         this.assetAllocationService = assetAllocationService;
     }
+
+    @GetMapping("/all")
+    public List<AssetAllocation> getAllAllocations() {
+        return assetAllocationService.getAllAllocations();
+    }
+
+
+    @GetMapping("/history/{assetId}")
+    public List<AssetAllocation> getAllocationHistory(@PathVariable Long assetId) {
+        return assetAllocationService.getAllocationHistory(assetId);
+    }
+
+
+    @PostMapping("/return")
+    public String returnAsset(@RequestBody Map<String, Object> request) {
+        Long allocationId = Long.valueOf(request.get("allocationId").toString());
+        LocalDate returnedDate = LocalDate.parse(request.get("returnedDate").toString());
+//        String reason = (String) request.get("reason");
+
+        return assetAllocationService.returnAsset(allocationId, returnedDate/*, reason*/);
+    }
+
+    @GetMapping("/assigned-assets")
+    public List<AssetAllocation> getAllAssignedAssets() {
+        return assetAllocationService.getAllAssignedAssets();
+    }
+
 
     @PostMapping("/allocate")
     public String allocateAsset(@RequestBody Map<String, Long> request) {
