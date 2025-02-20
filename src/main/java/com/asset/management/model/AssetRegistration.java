@@ -1,6 +1,7 @@
 package com.asset.management.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -43,12 +44,12 @@ private LocalDate warrantyStartDate;
 private LocalDate warrantyRenewalDate;
 
 
-    @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+    @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private HardwareDetails hardwareDetails;
 
-    @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+    @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private SoftwareDetails softwareDetails;
 
     public Company getCompany() {

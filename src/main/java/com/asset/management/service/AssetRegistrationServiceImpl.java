@@ -1,5 +1,11 @@
 package com.asset.management.service;
 
+import com.asset.management.dto.AssetDTO;
+import com.asset.management.dto.HardwareDTO;
+import com.asset.management.dto.SoftwareDTO;
+import com.asset.management.exception.AssetNotFoundException;
+import com.asset.management.exception.CSVProcessingException;
+import com.asset.management.exception.InvalidAssetException;
 import com.asset.management.model.*;
 import com.asset.management.repository.CategoryRepository;
 import com.asset.management.repository.AssetRegistrationRepository;
@@ -41,8 +47,9 @@ private final CompanyRepository companyrepository;
         Optional<Category> categoryOpt = categoryrepository.findById(categoryId);
 
         if (companyOpt.isEmpty() || categoryOpt.isEmpty()) {
-            throw new IllegalArgumentException("Invalid Company or Category ID");
+            throw new InvalidAssetException("Invalid Company or Category ID");
         }
+
 
         AssetRegistration asset = new AssetRegistration();
         asset.setName(name);
@@ -95,16 +102,88 @@ private final CompanyRepository companyrepository;
         return "ASSET-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
-    public void saveAssetsFromCSV(MultipartFile file) {
-        if (!CSVHelper.hasCSVFormat(file)) {
-            throw new RuntimeException("Invalid CSV file format.");
+public void saveAssetsFromCSV(MultipartFile file) {
+    if (!CSVHelper.hasCSVFormat(file)) {
+        throw new CSVProcessingException("Invalid CSV file format.");
+    }
+    try {
+        List<AssetRegistration> assets = CSVHelper.csvToAssets(new InputStreamReader(file.getInputStream()));
+        assetrepository.saveAll(assets);
+    } catch (Exception e) {
+        throw new CSVProcessingException("Failed to store CSV data", e);
+    }
+}
+
+
+
+
+    @Override
+    public void deleteAssetById(Long assetId) {
+        Optional<AssetRegistration> asset = assetrepository.findById(assetId);
+        if (asset.isEmpty()) {
+            throw new AssetNotFoundException("Asset with ID " + assetId + " not found.");
         }
-        try {
-            List<AssetRegistration> assets = CSVHelper.csvToAssets(new InputStreamReader(file.getInputStream()));
-            assetrepository.saveAll(assets);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to store CSV data: " + e.getMessage());
+        assetrepository.deleteById(assetId);
+
+    }
+
+    @Override
+    public AssetDTO getAssetById(Long assetId) {
+        Optional<AssetRegistration> assetOpt = assetrepository.findById(assetId);
+
+        if (assetOpt.isEmpty()) {
+            throw new InvalidAssetException("Asset with ID " + assetId + " not found.");
         }
+
+        AssetRegistration asset = assetOpt.get();
+//        HardwareDetails hardwareDetails = asset.getHardwareDetails();
+        SoftwareDetails softwareDetails = assetrepository.findById(assetId)
+                .map(AssetRegistration::getSoftwareDetails)
+                .orElse(null);
+
+        HardwareDetails hardwareDetails = assetrepository.findById(assetId)
+                .map(AssetRegistration::getHardwareDetails)
+                .orElse(null);
+
+        String categoryType = null;
+        HardwareDTO hardwareDTO = null;
+        SoftwareDTO softwareDTO = null;
+
+        System.out.println( asset.getHardwareDetails());
+        if (hardwareDetails != null) {
+            categoryType = asset.getCategory().getCategoryName();
+            hardwareDTO = new HardwareDTO(
+                    hardwareDetails.getSerialNumber(),
+                    hardwareDetails.getSpecifications(),
+                    hardwareDetails.getBrand(),
+                    hardwareDetails.getType()
+            );
+        }
+
+        if (softwareDetails != null) {
+            categoryType = asset.getCategory().getCategoryName();
+            softwareDTO = new SoftwareDTO(
+                    softwareDetails.getLicenses(),
+                    softwareDetails.getLicenseExpiryDate(),
+                    softwareDetails.getVersion(),
+                    softwareDetails.getSupportedos()
+            );
+        }
+        System.out.println("Returning asset: " + asset.getName() + " | Category: " + asset.getCategory().getCategoryName());
+
+        System.out.println("Asset Found: " + asset.getName());
+        System.out.println("Hardware Details: " + hardwareDTO);
+        System.out.println("Software Details: " + softwareDTO);
+
+        return new AssetDTO(
+                asset.getName(),
+                asset.getPrice(),
+                asset.getStatus(),
+                asset.getVendor(),
+                categoryType,
+                hardwareDTO,
+                softwareDTO
+        );
     }
 
 

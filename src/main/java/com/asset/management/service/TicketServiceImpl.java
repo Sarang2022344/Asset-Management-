@@ -7,6 +7,7 @@ import com.asset.management.model.Ticket;
 import com.asset.management.repository.AssetAllocationRepository;
 import com.asset.management.repository.EmployeeRepository;
 import com.asset.management.repository.TicketRepository;
+import com.asset.management.util.FileStorageService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

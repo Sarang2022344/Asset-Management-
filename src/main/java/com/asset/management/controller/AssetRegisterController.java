@@ -1,13 +1,11 @@
 package com.asset.management.controller;
 
+import com.asset.management.dto.AssetDTO;
 import com.asset.management.model.AssetRegistration;
 import com.asset.management.service.AssetRegistrationServiceImpl;
 import com.asset.management.service.CategoryServiceImpl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -61,6 +59,17 @@ private final AssetRegistrationServiceImpl asssetRegistration;
         return ResponseEntity.ok("CSV file uploaded and assets saved successfully!");
     }
 
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteAsset(@PathVariable Long id) {
+        asssetRegistration.deleteAssetById(id);
+        return ResponseEntity.ok("Asset with ID " + id + " deleted successfully.");
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<AssetDTO> getAssetById(@PathVariable Long id) {
+        return ResponseEntity.ok(asssetRegistration.getAssetById(id));
+    }
 
 
 
