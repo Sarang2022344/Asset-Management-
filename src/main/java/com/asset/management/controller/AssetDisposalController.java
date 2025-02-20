@@ -2,6 +2,7 @@ package com.asset.management.controller;
 
 
 import com.asset.management.dto.AssetDisposalDTO;
+import com.asset.management.dto.BulkAssetDisposalDTO;
 import com.asset.management.service.AssetDisposalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,9 +36,14 @@ public class AssetDisposalController {
         return ResponseEntity.ok(responseDTO);
     }
 
+//    @PostMapping("/bulk")
+//    public ResponseEntity<List<AssetDisposalDTO>> disposeAssetsInBulk(@RequestBody BulkAssetDisposalDTO bulkDisposalDTO) {
+//        List<AssetDisposalDTO> response = disposalService.disposeAssetsInBulk(bulkDisposalDTO);
+//        return ResponseEntity.ok(response);
+//    }
+
     @PutMapping("/{disposalId}")
-    public ResponseEntity<AssetDisposalDTO> updateDisposal(@PathVariable Long disposalId,
-                                                           @RequestBody AssetDisposalDTO disposalDTO) {
+    public ResponseEntity<AssetDisposalDTO> updateDisposal(@PathVariable Long disposalId, @RequestBody AssetDisposalDTO disposalDTO) {
         AssetDisposalDTO updatedDisposal = disposalService.updateDisposal(disposalId, disposalDTO);
         return ResponseEntity.ok(updatedDisposal);
     }
