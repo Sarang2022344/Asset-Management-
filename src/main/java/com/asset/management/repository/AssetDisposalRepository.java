@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface AssetDisposalRepository extends JpaRepository<AssetDisposal, Long> {
-    List<AssetRegistration> findByAssetIdIn(List<Long> assetIds);
+
 }
