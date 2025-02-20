@@ -41,7 +41,11 @@ public class AssetAllocationController {
 
     @GetMapping("/assigned-assets")
     public List<AssetAllocation> getAllAssignedAssets() {
-        return assetAllocationService.getAllAssignedAssets();
+        try {
+            return assetAllocationService.getAllAssignedAssets();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
