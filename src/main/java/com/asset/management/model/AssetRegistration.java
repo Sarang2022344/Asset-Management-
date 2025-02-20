@@ -3,7 +3,6 @@ package com.asset.management.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -44,13 +43,10 @@ private LocalDate warrantyStartDate;
 private LocalDate warrantyRenewalDate;
 
 
-
-    // One asset can have only one hardware detail
     @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private HardwareDetails hardwareDetails;
 
-    //  One asset can have only one software detail
     @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private SoftwareDetails softwareDetails;
@@ -135,13 +131,6 @@ private LocalDate warrantyRenewalDate;
         this.warrantyRenewalDate = warrantyRenewalDate;
     }
 
-//    public String getAdditionalDetails() {
-//        return additionalDetails;
-//    }
-//
-//    public void setAdditionalDetails(String additionalDetails) {
-//        this.additionalDetails = additionalDetails;
-//    }
 
     public long getAssetId() {
         return assetId;

@@ -41,7 +41,7 @@
 
 
 
-package com.asset.management.service;
+package com.asset.management.util;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
