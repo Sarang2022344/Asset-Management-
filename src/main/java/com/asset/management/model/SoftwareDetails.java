@@ -1,12 +1,24 @@
 package com.asset.management.model;
 
 import com.asset.management.service.CategorySpecificDetails;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.*;
 
 import java.util.List;
+@Entity
+@Table(name="software_details")
+public class SoftwareDetails{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @OneToOne
+    @JoinColumn(name="asset_id",nullable=false)
+    @JsonBackReference
+    private AssetRegistration asset;
 
-public class SoftwareDetails implements CategorySpecificDetails {
+    @ElementCollection
     private List<String> licenses;
     private String licenseExpiryDate;
     private String Version;
@@ -16,11 +28,20 @@ public class SoftwareDetails implements CategorySpecificDetails {
 
     }
 
-    public SoftwareDetails(List<String> licenses, String licenseExpiryDate, String version, String supportedos) {
-        this.licenses = licenses;
-        this.licenseExpiryDate = licenseExpiryDate;
-        Version = version;
-        this.supportedos = supportedos;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public AssetRegistration getAsset() {
+        return asset;
+    }
+
+    public void setAsset(AssetRegistration asset) {
+        this.asset = asset;
     }
 
     public String getVersion() {
@@ -63,16 +84,12 @@ public class SoftwareDetails implements CategorySpecificDetails {
         this.licenseExpiryDate = licenseExpiryDate;
     }
 
-    @Override
-    public String toJson() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting SoftwareDetails to JSON", e);
-        }
+    public SoftwareDetails(Long id, AssetRegistration asset, List<String> licenses, String licenseExpiryDate, String version, String supportedos) {
+        this.id = id;
+        this.asset = asset;
+        this.licenses = licenses;
+        this.licenseExpiryDate = licenseExpiryDate;
+        Version = version;
+        this.supportedos = supportedos;
     }
-
-
-
 }
