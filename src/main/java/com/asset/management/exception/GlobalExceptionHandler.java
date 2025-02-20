@@ -36,6 +36,27 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
     }
 
+    @ExceptionHandler(InvalidAssetException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidAssetException(InvalidAssetException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AssetNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleAssetNotFoundException(AssetNotFoundException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+//    @ExceptionHandler(CSVProcessingException.class)
+//    public ResponseEntity<Map<String, Object>> handleCSVProcessingException(CSVProcessingException ex) {
+//        return buildErrorResponse("Error processing CSV: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+//    }
+
+    @ExceptionHandler(CSVProcessingException.class)
+    public ResponseEntity<Map<String, Object>> handleCSVProcessingException(CSVProcessingException ex) {
+        return buildErrorResponse("Error processing CSV: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+
     private ResponseEntity<Map<String, Object>> buildErrorResponse(String message, HttpStatus status) {
         Map<String, Object> response = new HashMap<>();
         response.put("timestamp", LocalDateTime.now());
