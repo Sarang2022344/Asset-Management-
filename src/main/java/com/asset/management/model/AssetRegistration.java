@@ -1,10 +1,12 @@
 package com.asset.management.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name="asset")
@@ -15,6 +17,7 @@ private long assetId;
 
 @ManyToOne
 @JoinColumn(name="company_id",nullable=false)
+@JsonBackReference
 private Company company;
 
 @Column(nullable = false)
@@ -22,6 +25,7 @@ private Company company;
 
 @ManyToOne
 @JoinColumn(name="category_id")
+@JsonBackReference
 private Category category;
 
 @ElementCollection
@@ -34,12 +38,22 @@ private String barcode ;
 private LocalDate purchasedDate;
 private String vendor;
 private String invoicePath;
-private BigDecimal price;
+private double price;
 private String status;
-    private LocalDate warrantyStartDate;
-    private LocalDate warrantyRenewalDate;
-    @Column(columnDefinition = "TEXT")
-    private String additionalDetails;
+private LocalDate warrantyStartDate;
+private LocalDate warrantyRenewalDate;
+
+
+
+    // One asset can have only one hardware detail
+    @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private HardwareDetails hardwareDetails;
+
+    //  One asset can have only one software detail
+    @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private SoftwareDetails softwareDetails;
 
     public Company getCompany() {
         return company;
@@ -97,11 +111,11 @@ private String status;
         this.status = status;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -121,13 +135,13 @@ private String status;
         this.warrantyRenewalDate = warrantyRenewalDate;
     }
 
-    public String getAdditionalDetails() {
-        return additionalDetails;
-    }
-
-    public void setAdditionalDetails(String additionalDetails) {
-        this.additionalDetails = additionalDetails;
-    }
+//    public String getAdditionalDetails() {
+//        return additionalDetails;
+//    }
+//
+//    public void setAdditionalDetails(String additionalDetails) {
+//        this.additionalDetails = additionalDetails;
+//    }
 
     public long getAssetId() {
         return assetId;
@@ -153,7 +167,23 @@ private String status;
         this.category = category;
     }
 
-    public AssetRegistration(long assetId, Company company, String name, Category category, List<String> image, String barcode, LocalDate purchasedDate, String vendor, String invoicePath, BigDecimal price, String status, LocalDate warrantyStartDate, LocalDate warrantyRenewalDate, String additionalDetails) {
+    public HardwareDetails getHardwareDetails() {
+        return hardwareDetails;
+    }
+
+    public void setHardwareDetails(HardwareDetails hardwareDetails) {
+        this.hardwareDetails = hardwareDetails;
+    }
+
+    public SoftwareDetails getSoftwareDetails() {
+        return softwareDetails;
+    }
+
+    public void setSoftwareDetails(SoftwareDetails softwareDetails) {
+        this.softwareDetails = softwareDetails;
+    }
+
+    public AssetRegistration(long assetId, Company company, String name, Category category, List<String> image, String barcode, LocalDate purchasedDate, String vendor, String invoicePath, double price, String status, LocalDate warrantyStartDate, LocalDate warrantyRenewalDate, HardwareDetails hardwareDetails, SoftwareDetails softwareDetails) {
         this.assetId = assetId;
         this.company = company;
         this.name = name;
@@ -167,7 +197,8 @@ private String status;
         this.status = status;
         this.warrantyStartDate = warrantyStartDate;
         this.warrantyRenewalDate = warrantyRenewalDate;
-        this.additionalDetails = additionalDetails;
+        this.hardwareDetails = hardwareDetails;
+        this.softwareDetails = softwareDetails;
     }
 
     public AssetRegistration() {
