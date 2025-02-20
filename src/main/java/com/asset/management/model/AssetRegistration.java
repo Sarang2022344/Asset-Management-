@@ -34,7 +34,7 @@ private String barcode ;
 private LocalDate purchasedDate;
 private String vendor;
 private String invoicePath;
-private BigDecimal price;
+private Double price;
 private String status;
     private LocalDate warrantyStartDate;
     private LocalDate warrantyRenewalDate;
@@ -97,11 +97,11 @@ private String status;
         this.status = status;
     }
 
-    public BigDecimal getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -153,7 +153,7 @@ private String status;
         this.category = category;
     }
 
-    public AssetRegistration(long assetId, Company company, String name, Category category, List<String> image, String barcode, LocalDate purchasedDate, String vendor, String invoicePath, BigDecimal price, String status, LocalDate warrantyStartDate, LocalDate warrantyRenewalDate, String additionalDetails) {
+    public AssetRegistration(long assetId, Company company, String name, Category category, List<String> image, String barcode, LocalDate purchasedDate, String vendor, String invoicePath, Double price, String status, LocalDate warrantyStartDate, LocalDate warrantyRenewalDate, String additionalDetails) {
         this.assetId = assetId;
         this.company = company;
         this.name = name;
