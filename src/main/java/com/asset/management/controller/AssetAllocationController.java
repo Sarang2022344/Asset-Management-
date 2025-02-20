@@ -48,6 +48,16 @@ public class AssetAllocationController {
         }
     }
 
+    @GetMapping("/assigned-assets/{employeeId}")
+    public List<AssetAllocation> getAssignedAssets(@PathVariable Long employeeId) {
+        return assetAllocationService.getAssignedAssets(employeeId);
+    }
+
+
+    @PutMapping("/update/{allocationId}")
+    public String updateAssetAllocation(@PathVariable Long allocationId, @RequestBody Map<String, Object> updates) {
+        return assetAllocationService.updateAssetAllocation(allocationId, updates);
+    }
 
     @PostMapping("/allocate")
     public String allocateAsset(@RequestBody Map<String, Long> request) {
