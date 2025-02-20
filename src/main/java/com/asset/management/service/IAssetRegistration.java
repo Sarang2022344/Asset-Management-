@@ -14,7 +14,7 @@ public interface IAssetRegistration {
             MultipartFile invoiceFile, double price, String status,
             String categoryType,
             String serialNumber, String specifications, String brand, String type,
-            List<String> licenses, String licenseExpiryDate, String version, String supportedOs
+            List<String> licenses, String licenseExpiryDate, String version, String supportedOs, List<MultipartFile> imageFiles
     );
 
 }

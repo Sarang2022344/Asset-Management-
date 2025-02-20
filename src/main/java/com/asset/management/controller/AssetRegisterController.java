@@ -43,12 +43,14 @@ private final AssetRegistrationServiceImpl asssetRegistration;
             @RequestParam(required = false) List<String> licenses,
             @RequestParam(required = false) String licenseExpiryDate,
             @RequestParam(required = false) String version,
-            @RequestParam(required = false) String supportedOs
+            @RequestParam(required = false) String supportedOs,
+            // Image files
+        @RequestParam(name="imageFiles", required = false) List<MultipartFile> imageFiles
     ) {
         return asssetRegistration.registerAsset(
                 name, companyId, categoryId, vendor, invoiceFile, price, status, categoryType,
                 serialNumber, specifications, brand, type,
-                licenses, licenseExpiryDate, version, supportedOs
+                licenses, licenseExpiryDate, version, supportedOs, imageFiles
         );
     }
 
