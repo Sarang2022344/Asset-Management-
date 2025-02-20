@@ -7,6 +7,7 @@ import com.asset.management.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,7 +32,7 @@ private final CompanyRepository companyrepository;
             String vendor, MultipartFile invoiceFile, double price,
             String status, String categoryType,
             String serialNumber, String specifications, String brand, String type,
-            List<String> licenses, String licenseExpiryDate, String version, String supportedOs) {
+            List<String> licenses, String licenseExpiryDate, String version, String supportedOs, List<MultipartFile> imageFiles) {
 
         Optional<Company> companyOpt = companyrepository.findById(companyId);
         Optional<Category> categoryOpt = categoryrepository.findById(categoryId);
@@ -52,8 +53,18 @@ private final CompanyRepository companyrepository;
         asset.setBarcode(barcode);
 
         if (invoiceFile != null && !invoiceFile.isEmpty()) {
-            String invoicePath = fileStorageService.saveFile(invoiceFile);
+            String invoicePath = fileStorageService.saveFile(invoiceFile,"invoice");
             asset.setInvoicePath(invoicePath);
+        }
+
+        // Save image files if provided
+        if (imageFiles != null && !imageFiles.isEmpty()) {
+            List<String> imagePaths = new ArrayList<>();
+            for (MultipartFile imageFile : imageFiles) {
+                String imagePath = fileStorageService.saveFile(imageFile, "image");
+                imagePaths.add(imagePath);
+            }
+            asset.setImage(imagePaths);
         }
 
         if (categoryType.equalsIgnoreCase("Software")) {

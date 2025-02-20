@@ -1,10 +1,9 @@
 package com.asset.management.model;
 
-import com.asset.management.service.CategorySpecificDetails;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
+
 
 import java.util.List;
 @Entity
