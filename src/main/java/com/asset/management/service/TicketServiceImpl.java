@@ -40,7 +40,7 @@ public class TicketServiceImpl implements TicketService{
         System.out.println("Issue Description received: " + issueDescription);
         Ticket ticket = new Ticket();
        for(AssetAllocation assetAllocated :employee.getAssetAllocation()){
-           if(assetAllocated.getStatus().equalsIgnoreCase("Assgined")){
+           if(assetAllocated.getStatus().equalsIgnoreCase("Assigned")){
                ticket.setAssetId(assetAllocated.getAsset().getAssetId());
            }
        }
