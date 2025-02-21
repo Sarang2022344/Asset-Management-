@@ -1,5 +1,6 @@
 package com.asset.management.service;
 
+import com.asset.management.dto.AssetDTO;
 import com.asset.management.model.AssetRegistration;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,5 +17,8 @@ public interface IAssetRegistration {
             String serialNumber, String specifications, String brand, String type,
             List<String> licenses, String licenseExpiryDate, String version, String supportedOs, List<MultipartFile> imageFiles
     );
+
+    void deleteAssetById(Long assetId);
+    AssetDTO getAssetById(Long assetId);
 
 }
