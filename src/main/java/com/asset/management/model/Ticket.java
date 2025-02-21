@@ -26,6 +26,10 @@ public class Ticket {
 //    @JoinColumn(name = "asset_id", nullable = true)
 //    private AssetRegistration asset;
 
+
+    private Long assetId;
+
+
     private String issueDescription;
     private String issueImageUrl;
     private LocalDate createdAt=LocalDate.now();
@@ -78,6 +82,17 @@ public class Ticket {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
+    public Long getAssetId() {
+        return assetId;
+    }
+
+    public void setAssetId(Long assetId) {
+        this.assetId = assetId;
+    }
+
+
 }
 
 
