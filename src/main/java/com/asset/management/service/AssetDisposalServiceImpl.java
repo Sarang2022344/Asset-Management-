@@ -11,6 +11,7 @@ import com.asset.management.repository.AssetRegistrationRepository;
 import com.asset.management.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,6 +60,11 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         AssetRegistration asset = assetRepository.findById(disposalDTO.getAssetId())
                 .orElseThrow(() -> new ResourceNotFoundException("Asset not found with ID: " + disposalDTO.getAssetId()));
 
+        // New condition: Prevent disposal if the asset is "Assigned"
+        if ("Assigned".equalsIgnoreCase(asset.getStatus())) {
+            throw new IllegalStateException("This asset cannot be disposed as it is currently assigned.");
+        }
+
         if ("Disposed".equalsIgnoreCase(asset.getStatus())) {
             throw new AssetAlreadyDisposedException("This asset has already been disposed and cannot be disposed again.");
         }
@@ -66,10 +72,10 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         Company company = companyRepository.findById(disposalDTO.getCompanyId())
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found with ID: " + disposalDTO.getCompanyId()));
 
-
-//        Updating the asset status in the AssetRegistration
+        // Updating the asset status in the AssetRegistration
         asset.setStatus("Disposed");
         assetRepository.save(asset);
+
         AssetDisposal disposal = AssetDisposal.builder()
                 .asset(asset)
                 .company(company)
@@ -88,22 +94,20 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         );
     }
 
+
     @Override
     public AssetDisposalDTO updateDisposal(Long disposalId, AssetDisposalDTO disposalDTO) {
         AssetDisposal disposal = disposalRepository.findById(disposalId)
                 .orElseThrow(() -> new RuntimeException("Asset Disposal record not found"));
 
-        AssetRegistration asset = assetRepository.findById(disposalDTO.getAssetId())
-                .orElseThrow(() -> new RuntimeException("Asset not found"));
 
-        Company company = companyRepository.findById(disposalDTO.getCompanyId())
-                .orElseThrow(() -> new RuntimeException("Company not found"));
+        if (disposalDTO.getDisposalDate() != null) {
+            disposal.setDisposalDate(disposalDTO.getDisposalDate());
+        }
+        if (disposalDTO.getReason() != null) {
+            disposal.setReason(disposalDTO.getReason());
+        }
 
-
-        disposal.setAsset(asset);
-        disposal.setCompany(company);
-        disposal.setDisposalDate(disposalDTO.getDisposalDate());
-        disposal.setReason(disposalDTO.getReason());
 
         disposalRepository.save(disposal);
 
@@ -116,6 +120,16 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         );
     }
 
+    @Override
+    public List<AssetDisposalDTO> getDisposedAssetsByDateRange(LocalDate startDate, LocalDate endDate) {
+        List<AssetDisposal> disposals = disposalRepository.findByDisposalDateBetween(startDate, endDate);
 
-
+        return disposals.stream().map(disposal -> new AssetDisposalDTO(
+                disposal.getDisposalId(),
+                disposal.getAsset().getAssetId(),
+                disposal.getCompany().getCompanyId(),
+                disposal.getDisposalDate(),
+                disposal.getReason()
+        )).collect(Collectors.toList());
+    }
 }

@@ -4,6 +4,7 @@ import com.asset.management.service.AssetDisposalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -25,6 +26,15 @@ public class AssetDisposalController {
     public ResponseEntity<AssetDisposalDTO> getDisposalById(@PathVariable Long disposalId) {
         AssetDisposalDTO disposal = disposalService.getDisposalById(disposalId);
         return ResponseEntity.ok(disposal);
+    }
+
+    @GetMapping("/range")
+    public ResponseEntity<List<AssetDisposalDTO>> getDisposedAssetsByDateRange(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
+
+        List<AssetDisposalDTO> disposals = disposalService.getDisposedAssetsByDateRange(
+                LocalDate.parse(startDate), LocalDate.parse(endDate));
+
+        return ResponseEntity.ok(disposals);
     }
 
     @PostMapping
