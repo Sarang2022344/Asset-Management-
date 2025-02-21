@@ -2,7 +2,6 @@ package com.asset.management.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -16,23 +15,12 @@ public class MaintenanceLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String issueDescription;
     private String status;  // Possible values: Pending, In Progress, Completed
 
     @ManyToOne
     @JoinColumn(name = "performed_by", nullable = false)
     private User performedBy;  // Admin user_id who logged it
-
-//    @ManyToOne
-//    @JoinColumn(name = "ticket_id", nullable = true)
-//    private Ticket ticket;
-
-
-
-    @ManyToOne
-    @JoinColumn(name = "assigned_technician") // Nullable initially
-    private Technician assignedTechnician;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -72,14 +60,6 @@ public class MaintenanceLog {
 
     public void setPerformedBy(User performedBy) {
         this.performedBy = performedBy;
-    }
-
-    public Technician getAssignedTechnician() {
-        return assignedTechnician;
-    }
-
-    public void setAssignedTechnician(Technician assignedTechnician) {
-        this.assignedTechnician = assignedTechnician;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -8,12 +8,4 @@ import java.util.Optional;
 
 public interface MaintenanceLogRepository extends JpaRepository<MaintenanceLog,Long> {
     List<MaintenanceLog> findByPerformedBy_UserId(Long userId);
-
-
-
-
-
-
-    List<MaintenanceLog> findAll();
-
 }
