@@ -187,7 +187,71 @@ public void saveAssetsFromCSV(MultipartFile file) {
     }
 
 
+//BY SARANG
+@Override
+public void updateAsset(Long assetId, String name, String vendor, double price, String status) {
+    Optional<AssetRegistration> assetOpt = assetrepository.findById(assetId);
+    if (assetOpt.isEmpty()) {
+        throw new AssetNotFoundException("Asset with ID " + assetId + " not found.");
+    }
 
+    AssetRegistration asset = assetOpt.get();
+    asset.setName(name);
+    asset.setVendor(vendor);
+    asset.setPrice(price);
+    asset.setStatus(status);
+
+    assetrepository.save(asset);
+}
+
+    @Override
+    public List<AssetDTO> getAllAssets() {
+        List<AssetRegistration> assets = assetrepository.findAll();
+        List<AssetDTO> assetDTOs = new ArrayList<>();
+
+        for (AssetRegistration asset : assets) {
+            HardwareDetails hardwareDetails = asset.getHardwareDetails();
+            SoftwareDetails softwareDetails = asset.getSoftwareDetails();
+
+            HardwareDTO hardwareDTO = null;
+            SoftwareDTO softwareDTO = null;
+            String categoryType = null;
+
+            if (hardwareDetails != null) {
+                categoryType = asset.getCategory().getCategoryName();
+                hardwareDTO = new HardwareDTO(
+                        hardwareDetails.getSerialNumber(),
+                        hardwareDetails.getSpecifications(),
+                        hardwareDetails.getBrand(),
+                        hardwareDetails.getType()
+                );
+            }
+
+            if (softwareDetails != null) {
+                categoryType = asset.getCategory().getCategoryName();
+                softwareDTO = new SoftwareDTO(
+                        softwareDetails.getLicenses(),
+                        softwareDetails.getLicenseExpiryDate(),
+                        softwareDetails.getVersion(),
+                        softwareDetails.getSupportedos()
+                );
+            }
+
+            AssetDTO assetDTO = new AssetDTO(
+                    asset.getName(),
+                    asset.getPrice(),
+                    asset.getStatus(),
+                    asset.getVendor(),
+                    categoryType,
+                    hardwareDTO,
+                    softwareDTO
+            );
+
+            assetDTOs.add(assetDTO);
+        }
+
+        return assetDTOs;
+    }
 
 
 
