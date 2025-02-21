@@ -55,13 +55,6 @@ public class TicketServiceImpl implements TicketService{
         ticket.setRaisedBy(employee);
         ticket.setIssueDescription(issueDescription);
         ticket.setStatus("Pending");
-//        ticket.set
-
-
-        Ticket ticket = new Ticket();
-        ticket.setRaisedBy(employee);
-        ticket.setIssueDescription(issueDescription);
-        ticket.setStatus("Pending");
 
 
         // Save issue image and store the URL
@@ -86,6 +79,13 @@ public class TicketServiceImpl implements TicketService{
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
         return new TicketDTO(ticket);
+    }
+
+    public List<TicketDTO> getAllTickets(){
+        return ticketRepository.findAll()
+                .stream().map(TicketDTO::new)
+                .collect(Collectors.toList());
+
     }
 
 }

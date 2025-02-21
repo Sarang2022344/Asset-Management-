@@ -40,4 +40,10 @@ public class TicketController {
     public ResponseEntity<TicketDTO> getTicket(@PathVariable Long ticketId) {
         return ResponseEntity.ok(ticketService.getTicketById(ticketId));
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<TicketDTO>> getAllTickets() {
+        return ResponseEntity.ok(ticketService.getAllTickets());
+    }
+
 }

@@ -9,4 +9,5 @@ public interface TicketService {
     TicketDTO raiseTicket(Long employeeId, String issueDescription, MultipartFile issueImageUrl);
     List<TicketDTO> getTicketsByEmployee(Long employeeId);
     TicketDTO getTicketById(Long ticketId);
+    List<TicketDTO> getAllTickets();
 }
