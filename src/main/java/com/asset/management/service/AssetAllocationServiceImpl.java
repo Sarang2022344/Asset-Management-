@@ -30,6 +30,12 @@ public class AssetAllocationServiceImpl implements AssetAllocationService {
     }
 
     @Override
+    public List<AssetAllocation> getAssignedAssets(Long employeeId) {
+        // Query the repository for assets assigned to the given employee
+        return allocationRepository.findByEmployee_EmployeeIdAndStatus(employeeId, "Assigned");
+    }
+
+    @Override
     public String updateAssetAllocation(Long allocationId, Map<String, Object> updates) {
         Optional<AssetAllocation> allocationOptional = allocationRepository.findById(allocationId);
         if (allocationOptional.isEmpty()) {

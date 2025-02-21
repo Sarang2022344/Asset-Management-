@@ -17,6 +17,9 @@ public class TicketDTO {
     private String issueImageUrl;
     private LocalDate createdAt;
     private String status;
+
+    private Long assetId;
+
 //    private AssetRegistrationDTO asset;
 
     public TicketDTO(Ticket ticket) {
@@ -25,6 +28,8 @@ public class TicketDTO {
         this.issueImageUrl = ticket.getIssueImageUrl();
         this.status = ticket.getStatus();
         this.createdAt = ticket.getCreatedAt();
+
+        this.assetId=ticket.getAssetId();
 
 
     }
@@ -71,4 +76,14 @@ public class TicketDTO {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
+    public Long getAssetId() {
+        return assetId;
+    }
+
+    public void setAssetId(Long assetId) {
+        this.assetId = assetId;
+    }
+
 }
