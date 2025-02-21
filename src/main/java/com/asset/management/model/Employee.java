@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 
 
@@ -18,6 +20,9 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long employeeId;
+
+    @OneToMany(mappedBy = "employee")
+    private List<AssetAllocation> assetAllocation;
 
     @Column(nullable = false)
     private String name;
