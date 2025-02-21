@@ -29,14 +29,18 @@ public class MaintenanceLogController {
     }
 
     @PutMapping("/{logId}/resolve")
-    public ResponseEntity<MaintenanceLogDTO> resolveLog(@PathVariable Long logId) {
-        // Calls the service to update the status to "Resolved"
-        MaintenanceLogDTO updatedLog = maintenanceLogService.updateStatus(logId, "Resolved");
+    public ResponseEntity<MaintenanceLogDTO> resolveLog(
+            @PathVariable Long logId,
+            @RequestParam(value = "invoiceFile", required = false) MultipartFile invoiceFile) {
+
+        MaintenanceLogDTO updatedLog = maintenanceLogService.updateStatus(logId, "Resolved",invoiceFile);
         return ResponseEntity.ok(updatedLog);
     }
 
-
-
-
+    @GetMapping("/all")
+    public ResponseEntity<List<MaintenanceLogDTO>> getAllLogs(){
+        List<MaintenanceLogDTO> logs = maintenanceLogService.getAllLogs();
+        return ResponseEntity.ok(logs);
+    }
 
 }

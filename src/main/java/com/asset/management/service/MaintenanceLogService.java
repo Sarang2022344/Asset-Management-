@@ -9,9 +9,5 @@ import java.util.List;
 public interface MaintenanceLogService {
     MaintenanceLogDTO addLog(Long adminId,String issueDescription,MultipartFile issueImageUrl);
     List<MaintenanceLogDTO> getAllLogs();
-    MaintenanceLogDTO updateStatus(Long logId, String status);
-
-
-
-
+    MaintenanceLogDTO updateStatus(Long logId, String status,MultipartFile invoiceFile);
 }

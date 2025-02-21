@@ -17,8 +17,6 @@ public class MaintenanceLogDTO {
     private String status;
     private Long performedBy; // Admin user ID
     private LocalDateTime createdAt;
-    private Long technicianId;
-    private TicketDTO ticket;
     private String issueImageUrl;
     private String invoicePath;
 
@@ -28,16 +26,17 @@ public class MaintenanceLogDTO {
         this.status = log.getStatus();
         this.performedBy = log.getPerformedBy().getUserId();
         this.createdAt = log.getCreatedAt();
-//        this.invoicePath = log.getInvoicePath();
-//        if(log.getTicket() != null) {
-//            this.ticket = new TicketDTO(log.getTicket());
-//        }
-
+        this.invoicePath = log.getInvoicePath();
         this.issueImageUrl = log.getIssueImageUrl();
 
-//        this.technicianId = (log.getAssignedTechnician() != null) ? log.getAssignedTechnician().getId() : null;
     }
     public MaintenanceLogDTO(){}
 
+    public String getInvoicePath() {
+        return invoicePath;
+    }
 
+    public void setInvoicePath(String invoicePath) {
+        this.invoicePath = invoicePath;
+    }
 }
