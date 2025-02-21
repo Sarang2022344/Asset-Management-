@@ -149,11 +149,14 @@ public class AssetAllocationServiceImpl implements AssetAllocationService {
         allocation.setEmployee(employee);
         allocation.setAllocatedDate(LocalDate.now());
         allocation.setStatus("Assigned");
+        assetOptional.get().setStatus("Assigned");
         // Normally, you'd fetch the user from a UserRepository
-        allocation.setPerformedBy(new User(userId.longValue(), "Admin")); // Example user
+        allocation.setPerformedBy(new User(userId.longValue(), "Admin"));
 
         allocationRepository.save(allocation);
 
         return "Asset successfully allocated!";
     }
+
+
 }

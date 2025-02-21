@@ -21,4 +21,8 @@ public interface IAssetRegistration {
     void deleteAssetById(Long assetId);
     AssetDTO getAssetById(Long assetId);
 
+    //By Sarang
+    void updateAsset(Long assetId, String name, String vendor, double price, String status);
+    List<AssetDTO> getAllAssets();
+
 }

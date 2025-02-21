@@ -71,10 +71,28 @@ private final AssetRegistrationServiceImpl asssetRegistration;
         return ResponseEntity.ok(asssetRegistration.getAssetById(id));
     }
 
+    //BySarang
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateAsset(
+            @PathVariable Long id,
+            @RequestParam String name,
+            @RequestParam String vendor,
+            @RequestParam double price,
+            @RequestParam String status) {
 
-
+        asssetRegistration.updateAsset(id, name, vendor, price, status);
+        return ResponseEntity.ok("Asset updated successfully.");
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<AssetDTO>> getAllAssets() {
+        return ResponseEntity.ok(asssetRegistration.getAllAssets());
+    }
+
+
+
+}
 
 
 

@@ -1,5 +1,6 @@
 package com.asset.management.service;
 
+import com.asset.management.dto.AssetDTO;
 import com.asset.management.model.AssetAllocation;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ public interface AssetAllocationService {
     List<AssetAllocation> getAllAssignedAssets();
     String updateAssetAllocation(Long allocationId, Map<String, Object> updates);
     List<AssetAllocation> getAssignedAssets(Long employeeId);
+
 
 }
 
