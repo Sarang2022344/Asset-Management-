@@ -30,4 +30,10 @@ public class AssetDisposal {
 
     private LocalDate disposalDate;
     private String reason;
+    @PrePersist
+    public void setDisposalDateBeforePersist() {
+        if (this.disposalDate == null) {
+            this.disposalDate = LocalDate.now();
+        }
+    }
 }

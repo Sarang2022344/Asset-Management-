@@ -2,6 +2,7 @@ package com.asset.management.service;
 
 import com.asset.management.dto.AssetDisposalDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AssetDisposalService {
@@ -10,5 +11,6 @@ public interface AssetDisposalService {
 
     List<AssetDisposalDTO> getAllDisposals();
     AssetDisposalDTO getDisposalById(Long disposalId);
+    List<AssetDisposalDTO> getDisposedAssetsByDateRange(LocalDate startDate, LocalDate endDate);
 
 }
