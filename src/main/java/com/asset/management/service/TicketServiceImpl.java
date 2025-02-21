@@ -1,14 +1,18 @@
 package com.asset.management.service;
 
 import com.asset.management.dto.TicketDTO;
+
 import com.asset.management.exception.NoAssignedAssetsException;
+
 import com.asset.management.model.AssetAllocation;
 import com.asset.management.model.Employee;
 import com.asset.management.model.Ticket;
 import com.asset.management.repository.AssetAllocationRepository;
 import com.asset.management.repository.EmployeeRepository;
 import com.asset.management.repository.TicketRepository;
+
 import com.asset.management.util.FileStorageService;
+
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +42,7 @@ public class TicketServiceImpl implements TicketService{
 
         // Log the issue description to check its value
         System.out.println("Issue Description received: " + issueDescription);
+
         Ticket ticket = new Ticket();
        for(AssetAllocation assetAllocated :employee.getAssetAllocation()){
            if(assetAllocated.getStatus().equalsIgnoreCase("Assigned")){
@@ -51,6 +56,13 @@ public class TicketServiceImpl implements TicketService{
         ticket.setIssueDescription(issueDescription);
         ticket.setStatus("Pending");
 //        ticket.set
+
+
+        Ticket ticket = new Ticket();
+        ticket.setRaisedBy(employee);
+        ticket.setIssueDescription(issueDescription);
+        ticket.setStatus("Pending");
+
 
         // Save issue image and store the URL
         if (issueImageUrl != null && !issueImageUrl.isEmpty()) {
@@ -75,7 +87,5 @@ public class TicketServiceImpl implements TicketService{
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
         return new TicketDTO(ticket);
     }
-
-
 
 }

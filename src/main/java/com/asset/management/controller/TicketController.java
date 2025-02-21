@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("tickets")
 
-
 public class TicketController {
     private final TicketService ticketService;
 
@@ -32,14 +31,10 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.raiseTicket(employeeId,issueDescription,issueImageUrl));
     }
 
-    //Get all tickets raised by an employee
-
     @GetMapping("/employee/{employeeId}")
     public ResponseEntity<List<TicketDTO>> getTickets(@PathVariable Long employeeId) {
         return ResponseEntity.ok(ticketService.getTicketsByEmployee(employeeId));
     }
-
-    //Get details of a specific ticket
 
     @GetMapping("/{ticketId}")
     public ResponseEntity<TicketDTO> getTicket(@PathVariable Long ticketId) {
