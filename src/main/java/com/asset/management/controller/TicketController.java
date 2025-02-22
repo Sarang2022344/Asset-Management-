@@ -23,12 +23,13 @@ public class TicketController {
 
     //Raise a new maintenance ticket
 
-    @PostMapping(value ="/employee/{employeeId}",consumes = "multipart/form-data" )
+    @PostMapping(value = "/employee/{employeeId}/raise-ticket", consumes = "multipart/form-data")
     public ResponseEntity<TicketDTO> raiseTicket(
             @PathVariable Long employeeId,
+            @RequestParam String assetName,  // Employee selects asset name
             @RequestParam String issueDescription,
-            @RequestParam(value = "issueImage", required = false) MultipartFile issueImageUrl){
-        return ResponseEntity.ok(ticketService.raiseTicket(employeeId,issueDescription,issueImageUrl));
+            @RequestParam(value = "issueImage", required = false) MultipartFile issueImageUrl) {
+        return ResponseEntity.ok(ticketService.raiseTicket(employeeId, assetName, issueDescription, issueImageUrl));
     }
 
     @GetMapping("/employee/{employeeId}")
