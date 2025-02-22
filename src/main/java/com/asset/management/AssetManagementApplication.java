@@ -14,6 +14,7 @@ public class AssetManagementApplication  {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AssetManagementApplication.class, args);
+
 	}
 
 	@Bean
