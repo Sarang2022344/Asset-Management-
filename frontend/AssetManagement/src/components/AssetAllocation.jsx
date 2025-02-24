@@ -1,3 +1,4 @@
+
 // import React, { useEffect, useState } from 'react';
 // import {
 //   getAllAllocations,
@@ -267,6 +268,8 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../components/AssetAllocation.css';
 
+
+
 const AssetAllocation = () => {
   const [allocations, setAllocations] = useState([]);
   const [assetId, setAssetId] = useState('');
@@ -515,3 +518,6 @@ const AssetAllocation = () => {
 };
 
 export default AssetAllocation;
+
+
+
