@@ -21,6 +21,7 @@ const AddAssetRegistration = () => {
         <div className="d-flex">
           <Form.Control type="text" placeholder="Search..." className="me-2" />
           <Button variant="secondary">Filter</Button>
+          <Button variant="secondary">Upload</Button>
         </div>
         <Button variant="primary" onClick={handleShowModal}>Add Asset</Button>
       </div>
