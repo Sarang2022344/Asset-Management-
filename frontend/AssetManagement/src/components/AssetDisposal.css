@@ -1,195 +1,56 @@
-/* Page Container */
-.page-container {
-  display: flex;
-  min-height: 100vh;
-}
 
-/* Main Content */
-.main-content {
-  margin-left: 250px; /* Adjust based on sidebar width */
-  flex-grow: 1;
-  padding: 20px;
-}
-
-/* Header */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 10px;
-  background-color: #216093; /* Updated to use #194a7a */
-  border-bottom: 1px solid #ddd;
-  color: white; /* Ensure text is visible on the dark background */
-}
-
-.search-bar {
-  flex-grow: 1;
-  margin-right: auto;
-}
-
-.search-bar input {
-  width: 97%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #f4f4f4; /* Light background for the input */
-  color: #333; /* Dark text for better readability */
-}
-
-.filter-button button {
-  padding: 8px 20px;
-  border: none; /* Removed border */
-  margin-right: 10px;
-  border-radius: 6px;
-  background-color: #fff;
-  cursor: pointer;
-  color: #194a7a;
-}
-
-.filter-button button:hover {
-  background-color: #194a7a;
-  color: white;
-}
-
-
-
-.add-asset-button button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  background-color: #194a7a; /* Updated to use #194a7a */
-  color: #fff;
-  cursor: pointer;
-  border: 1px solid #194a7a; /* Added border for consistency */
-}
-
-.add-asset-button button:hover {
-  background-color: #1365a7; /* Slightly lighter shade for hover */
-  border-color: #1365a7; /* Updated border color on hover */
-}
-
-/* Content */
-.content {
-  margin-top: 20px;
-  color: #194a7a; /* Updated to use #194a7a for text */
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center the table */
-}
-
-/* Table Container */
-.table-container {
-  width: 100%;
-  max-width: 1200px; /* Adjust as needed */
-  overflow-y: auto; /* Enable vertical scrolling */
-  max-height: 500px; /* Set a fixed height for the table container */
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.asset-disposal-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.asset-disposal-table th,
-.asset-disposal-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.asset-disposal-table th {
-  background-color: #194a7a;
-  color: white;
-}
-
-.asset-disposal-table tr:hover {
-  background-color: #f1f1f1;
-}
-
-/* Pop-up Form Styles */
-.popup-form-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.popup-form {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.popup-form h2 {
-  margin-bottom: 20px;
-  color: #194a7a;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #194a7a;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.form-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.form-buttons button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.form-buttons button[type="submit"] {
-  background-color: #194a7a;
-  color: white;
-}
-
-.form-buttons button[type="button"] {
-  background-color: #ccc;
-  color: #333;
-}
-
-/* Dropdown Styling */
-.form-group select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #333;
-  font-size: 14px;
-}
-
-.form-group select:focus {
-  border-color: #194a7a;
-  outline: none;
-}
+/* Container */
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  /* Heading */
+  .container h2 {
+    color: #194a7a;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  /* Form */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Input Fields */
+  input, select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  input:focus, select:focus {
+    border-color: #194a7a;
+  }
+  
+  /* Button */
+  button {
+    background-color: #194a7a;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #143a5a;
+  }
