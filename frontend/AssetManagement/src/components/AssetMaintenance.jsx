@@ -8,12 +8,12 @@ import "../components/AssetMaintenance.css";
 
 const AssetMaintenance = () => {
   const [maintenanceLogs, setMaintenanceLogs] = useState([
-    { id: 1, assetId: "A001", issueDescription: "Screen not working", createdAt: "2024-02-25", status: "Pending" },
-    { id: 2, assetId: "A002", issueDescription: "Battery issue", createdAt: "2024-02-24", status: "Pending" }
+    { id: 1, assetId: "A001", issueDescription: "Screen not working", createdAt: "2024-02-25", status: "Pending",invoice: null },
+    { id: 2, assetId: "A002", issueDescription: "Battery issue", createdAt: "2024-02-24", status: "Pending" ,invoice: null}
   ]);
   const [raisedTickets, setRaisedTickets] = useState([
-    { id: 3, assetId: "A003", issueDescription: "Keyboard issue", createdAt: "2024-02-23", status: "Pending" },
-    { id: 4, assetId: "A004", issueDescription: "Mouse not working", createdAt: "2024-02-22", status: "Pending" }
+    { id: 3, assetId: "A003", issueDescription: "Keyboard issue", createdAt: "2024-02-23", status: "Pending",invoice: null },
+    { id: 4, assetId: "A004", issueDescription: "Mouse not working", createdAt: "2024-02-22", status: "Pending",invoice: null }
   ]);
   const [showRaisedTickets, setShowRaisedTickets] = useState(false);
   const [log, setLog] = useState({ assetId: "", issueDescription: "", issueImage: null });
@@ -39,6 +39,13 @@ const AssetMaintenance = () => {
     setMaintenanceLogs(maintenanceLogs.map(log => log.id === id ? { ...log, status } : log));
     setRaisedTickets(raisedTickets.map(ticket => ticket.id === id ? { ...ticket, status } : ticket));
   };
+
+  const handleInvoiceUpload = (id, file) => {
+    setTickets(tickets.map(ticket => ticket.id === id ? { ...ticket, invoice: file } : ticket));
+    setMaintenanceLogs(maintenanceLogs.map(log => log.id === id ? { ...log, invoice: file } : log));
+  };
+
+
 
   return (
     <div className="asset-allocation-container">
@@ -78,6 +85,7 @@ const AssetMaintenance = () => {
                 <th>Created At</th>
                 <th>Status</th>
                 <th>Actions</th>
+                <th>Invoice</th>
               </tr>
             </thead>
             <tbody>
@@ -88,6 +96,9 @@ const AssetMaintenance = () => {
                   <td>{log.issueDescription}</td>
                   <td>{log.createdAt}</td>
                   <td>{log.status}</td>
+                  <td>
+                      <input type="file" disabled={log.status !== "Resolved"} onChange={(e) => handleInvoiceUpload(log.id, e.target.files[0])} />
+                  </td>
                   <td>
                     <button className="btn btn-warning btn-action" onClick={() => handleMaintenanceStatusChange(log.id, "In Progress")}>In Progress</button>
                     <button className="btn btn-success btn-action" onClick={() => handleMaintenanceStatusChange(log.id, "Resolved")}>Resolved</button>
@@ -115,6 +126,7 @@ const AssetMaintenance = () => {
                   <th>Issue Description</th>
                   <th>Created At</th>
                   <th>Status</th>
+                  <th>Invoice</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -126,6 +138,9 @@ const AssetMaintenance = () => {
                     <td>{ticket.issueDescription}</td>
                     <td>{ticket.createdAt}</td>
                     <td>{ticket.status}</td>
+                    <td>
+                      <input type="file" disabled={ticket.status !== "Resolved"} onChange={(e) => handleInvoiceUpload(ticket.id, e.target.files[0])} />
+                    </td>
                     <td>
                       <button className="btn btn-warning btn-action" onClick={() => handleTicketStatusChange(ticket.id, "In Progress")}>In Progress</button>
                       <button className="btn btn-success btn-action" onClick={() => handleTicketStatusChange(ticket.id, "Resolved")}>Resolved</button>
