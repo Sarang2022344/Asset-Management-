@@ -24,7 +24,27 @@ const RegistrationService = {
   }
 },
 
+getAssetById: async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/registration/get/${id}`);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error(`Error fetching asset with ID ${id}:`, error);
+    throw error;
+  }
+},
 
+deleteAssetById: async (id) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/api/registration/delete/${id}`);
+    console.log(`Asset with ID ${id} deleted successfully.`);
+    return response;
+  } catch (error) {
+    console.error(`Error deleting asset with ID ${id}:`, error);
+    throw error;
+  }
+},
 
 
 
