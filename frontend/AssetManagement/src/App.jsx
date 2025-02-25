@@ -7,7 +7,9 @@ import AssetMaintenance from "./components/AssetMaintenance";
 import AssetDisposal from "./components/AssetDisposal";
 import LoginForm from "./components/Login";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import dashboard from "./components/dashboard";
+import Dashboard from "./components/dashboard";
+
+
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,9 +25,9 @@ const App = () => {
       ) : (
         <div className="flex">
           <Sidebar />
-          <main className="ml-64 p-10 flex-1">
+          <main className="ml-64 p-10 ">
             <Routes>
-            <Route path="/asset-dashboard" element={<dashboard/>} />
+            <Route path="/asset-dashboard" element={<Dashboard/>} />
               <Route path="/asset-registration" element={<AddAssetRegistration />} />
               <Route path="/asset-allocation" element={<AssetAllocation />} />
               <Route path="/asset-maintenance" element={<AssetMaintenance />} />
