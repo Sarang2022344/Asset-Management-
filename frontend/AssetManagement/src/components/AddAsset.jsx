@@ -209,6 +209,7 @@ const AddAssetForm = ({ onClose, refreshAssets }) => {
         data.append(key, formData[key]);
       }
     });
+
     try {
       await RegistrationService.createAsset(data);
       alert("Asset added successfully!");
