@@ -1,0 +1,45 @@
+import axios from 'axios';
+
+const API_URL = 'http://192.168.1.14:8080/api/asset-allocation';
+
+export const getAllAllocations = async () => {
+    const response = await axios.get(`${API_URL}/all`);
+    return response.data;
+};
+
+export const getAllocationHistory = async (assetId) => {
+    const response = await axios.get(`${API_URL}/history/${assetId}`);
+    return response.data;
+};
+
+export const returnAsset = async (allocationId, returnedDate) => {
+    const response = await axios.post(`${API_URL}/return`, {
+        allocationId,
+        returnedDate,
+    });
+    return response.data;
+};
+
+export const getAllAssignedAssets = async () => {
+    const response = await axios.get(`${API_URL}/assigned-assets`);
+    return response.data;
+};
+
+export const getAssignedAssetsByEmployee = async (employeeId) => {
+    const response = await axios.get(`${API_URL}/assigned-assets/${employeeId}`);
+    return response.data;
+};
+
+export const updateAssetAllocation = async (allocationId, updates) => {
+    const response = await axios.put(`${API_URL}/update/${allocationId}`, updates);
+    return response.data;
+};
+
+export const allocateAsset = async (assetId, employeeId, userId) => {
+    const response = await axios.post(`${API_URL}/allocate`, {
+        assetId,
+        employeeId,
+        userId,
+    });
+    return response.data;
+};
