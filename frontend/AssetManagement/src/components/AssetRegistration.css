@@ -44,7 +44,7 @@
   }
   
   .btn-primary:hover {
-    background-color: #1365a7; 
+    background-color: #b7d5ed; 
   }
   
  
@@ -90,3 +90,14 @@
     background-color: rgba(0, 0, 0, 0.075); 
   }
 
+/* Add this to your existing CSS */
+.modal-content {
+  max-width: 100%; /* Ensure modal content does not exceed viewport width */
+  overflow-x: hidden; /* Prevent horizontal scrollbar */
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto; 
+  max-height: 80vh; 
+}
