@@ -6,15 +6,16 @@ const API_BASE_URL = import.meta.env.VITE_APP_API_URL;
 const RegistrationService = {
   
   createAsset: async (formData) => {
-    return axios.post(`${API_BASE_URL}/register`, formData, {
+    return axios.post(`${API_BASE_URL}/api/registration/register`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   },
 
+
   getAllAssets: async () => {
-  console.log("Fetching assets from:", `${API_BASE_URL}/all`); 
+  console.log("Fetching assets from:", `${API_BASE_URL}/api/registration/all`); 
   try {
-    const response = await axios.get(`${API_BASE_URL}/all`);
+    const response = await axios.get(`${API_BASE_URL}/api/registration/all`);
     console.log("API Response:", response.data); 
     return response;
   } catch (error) {
@@ -22,6 +23,10 @@ const RegistrationService = {
     throw error;
   }
 },
+
+
+
+
 
 };
 

@@ -61,8 +61,6 @@
     background-color: #5a6268;
   }
   
- 
-  
   .table {
     width: 100%;
     border-collapse: collapse;
@@ -90,10 +88,9 @@
     background-color: rgba(0, 0, 0, 0.075); 
   }
 
-/* Add this to your existing CSS */
 .modal-content {
-  max-width: 100%; /* Ensure modal content does not exceed viewport width */
-  overflow-x: hidden; /* Prevent horizontal scrollbar */
+  max-width: 100%; 
+  overflow-x: hidden; 
 }
 
 .modal-body {
