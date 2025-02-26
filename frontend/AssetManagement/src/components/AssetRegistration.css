@@ -1,6 +1,7 @@
 /* AddAsset.css */
 .container.mt-4 {
     margin-left: 250px; 
+    margin-right: 250px;
     padding: 20px 10px 10px 10px ;
     min-height: 100vh;
     transition: margin-left 0.3s ease; 
@@ -35,7 +36,7 @@
   }
 
 .btn-primary {
-    background-color: #194a7a; 
+    background-color: #073d73; 
     border: none;
     padding: 8px 16px;
     border-radius: 5px;
@@ -62,7 +63,7 @@
   }
   
   .table {
-    width: 100%;
+   width:fit-content;
     border-collapse: collapse;
     margin-top: 20px;
   }
