@@ -84,7 +84,7 @@ public class AssetAllocationServiceImpl implements AssetAllocationService {
 
 
     public List<AssetAllocation> getAllAllocations() {
-        return allocationRepository.findAll();
+        return allocationRepository.findAllWithDetails();
     }
 
 

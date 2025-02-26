@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-const API_URL = 'http://192.168.1.14:8080/api/asset-allocation';
+const API_URL = 'http://192.168.1.13:8080/api/asset-allocation';
 
 export const getAllAllocations = async () => {
     const response = await axios.get(`${API_URL}/all`);
+    console.log("allocation data response",response);
     return response.data;
 };
 

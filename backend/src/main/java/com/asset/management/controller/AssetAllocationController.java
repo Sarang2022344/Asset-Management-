@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin("http://localhost:5173/")
 @RestController
 @RequestMapping("/api/asset-allocation")
 public class AssetAllocationController {
@@ -20,6 +21,7 @@ public class AssetAllocationController {
 
     @GetMapping("/all")
     public List<AssetAllocation> getAllAllocations() {
+
         return assetAllocationService.getAllAllocations();
     }
 

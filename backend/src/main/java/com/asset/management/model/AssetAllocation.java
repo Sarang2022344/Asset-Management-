@@ -1,5 +1,7 @@
 package com.asset.management.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -15,10 +17,13 @@ public class AssetAllocation {
 
     @ManyToOne
     @JoinColumn(name = "asset_id", nullable = false)
+    @JsonIgnoreProperties({"name", "image", "barcode", "purchasedDate", "invoicePath", "hardwareDetails", "softwareDetails"})
+//    @JsonIgnoreProperties({"vendor","warrantyStartDate","warrantyRenewalDate","name", "image", "barcode", "purchasedDate", "invoicePath", "hardwareDetails", "softwareDetails"})
     private AssetRegistration asset;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
+    @JsonIgnoreProperties({"assetAllocation"})
     private Employee employee;
 
     @Column(nullable = false)
