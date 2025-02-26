@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import "./login.css"; 
+import { useNavigate } from "react-router-dom";
+import "./login.css";
 
 const Login = ({ onLogin }) => {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ username: "", password: "" });
+  const navigate = useNavigate();
+
+  const adminEmail = "admin@example.com"; // Set your admin email
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -13,9 +14,14 @@ const Login = ({ onLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-      onLogin(); 
-   
+
+    if (formData.username === adminEmail) {
+      onLogin("admin");
+      navigate("/asset-dashboard"); // Redirect admin
+    } else {
+      onLogin("employee");
+      navigate("/employee-dashboard"); // Redirect employee
+    }
   };
 
   return (
@@ -24,14 +30,14 @@ const Login = ({ onLogin }) => {
         <h2>Login</h2>
 
         <div className="input-group">
-          <label>Username</label>
+          <label>Email</label>
           <input
-            type="text"
+            type="email"
             name="username"
-            
-          
-            placeholder="Enter your username"
-          
+            value={formData.username}
+            onChange={handleChange}
+            placeholder="Enter your email"
+            required
           />
         </div>
 
@@ -40,10 +46,10 @@ const Login = ({ onLogin }) => {
           <input
             type="password"
             name="password"
-            
-         
+            value={formData.password}
+            onChange={handleChange}
             placeholder="Enter your password"
-            
+            required
           />
         </div>
 
