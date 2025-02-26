@@ -28,7 +28,6 @@ const AddAssetForm = ({ onClose, refreshAssets }) => {
   });
 
 
-   // ✅ Fetch categories when component loads
    useEffect(() => {
     fetchCategories();
   }, []);
@@ -36,13 +35,12 @@ const AddAssetForm = ({ onClose, refreshAssets }) => {
   const fetchCategories = async () => {
     try {
       const data = await CategoryService.getAllCategories();
-      setCategories(data); // ✅ Store categories
+      setCategories(data); 
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
 
-  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
