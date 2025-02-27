@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/registration")
 public class AssetRegisterController {
 private final CategoryServiceImpl categoryService;
@@ -87,7 +88,10 @@ private final AssetRegistrationServiceImpl asssetRegistration;
 
     @GetMapping("/all")
     public ResponseEntity<List<AssetDTO>> getAllAssets() {
+        System.out.println("Data is fetching ");
+
         return ResponseEntity.ok(asssetRegistration.getAllAssets());
+
     }
 
 
