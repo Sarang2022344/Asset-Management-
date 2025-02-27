@@ -15,7 +15,6 @@ public interface AssetAllocationService {
     List<AssetAllocation> getAllAssignedAssets();
     String updateAssetAllocation(Long allocationId, Map<String, Object> updates);
     List<AssetAllocation> getAssignedAssets(Long employeeId);
-
-
+    String allocateAssetByBarcode(String barcode, Long employeeId, Long userId);
 }
 

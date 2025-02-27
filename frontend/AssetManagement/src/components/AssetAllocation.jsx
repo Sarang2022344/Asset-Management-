@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   getAllAllocations,
-  allocateAsset,
+  allocateAssetByBarcode,
   returnAsset,
   updateAssetAllocation,
 } from '../api/service/api';
@@ -10,7 +10,7 @@ import '../components/AssetAllocation.css';
 
 const AssetAllocation = () => {
   const [allocations, setAllocations] = useState([]);
-  const [assetId, setAssetId] = useState('');
+  const [barcode, setBarcode] = useState(''); // Barcode input
   const [employeeId, setEmployeeId] = useState('');
   const [userId, setUserId] = useState('');
   const [allocationId, setAllocationId] = useState('');
@@ -20,6 +20,7 @@ const AssetAllocation = () => {
   const [showAllocateForm, setShowAllocateForm] = useState(false);
   const [showReturnForm, setShowReturnForm] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [showAllocationsTable, setShowAllocationsTable] = useState(false); // New state for table visibility
 
   // Fetch all allocations on page load
   useEffect(() => {
@@ -30,21 +31,21 @@ const AssetAllocation = () => {
     fetchAllocations();
   }, []);
 
-  // Handle asset allocation
   const handleAllocateAsset = async (e) => {
     e.preventDefault();
-    if (!assetId || !employeeId || !userId) {
+    if (!barcode || !employeeId || !userId) {
       setMessage('Please fill all fields!');
       return;
     }
-    const response = await allocateAsset(assetId, employeeId, userId);
-    setMessage(response);
-    setAssetId('');
-    setEmployeeId('');
-    setUserId('');
-    // Refresh allocations
-    const data = await getAllAllocations();
-    setAllocations(data);
+    try {
+      const response = await allocateAssetByBarcode(barcode, employeeId, userId);
+      setMessage(response);
+      setBarcode('');
+      setEmployeeId('');
+      setUserId('');
+    } catch (error) {
+      setMessage('Failed to allocate asset. Please try again.');
+    }
   };
 
   // Handle asset return
@@ -66,42 +67,18 @@ const AssetAllocation = () => {
   // Handle allocation update
   const handleUpdateAllocation = async (e) => {
     e.preventDefault();
-
-    // Validate Allocation ID
-    if (!allocationId) {
-      setMessage('Allocation ID is required!');
+    if (!allocationId || !status) {
+      setMessage('Please fill all fields!');
       return;
     }
-
-    // Build updates object dynamically
-    const updates = {};
-    if (employeeId) updates.employeeId = employeeId;
-    if (returnedDate) updates.returnedDate = returnedDate;
-    if (status) updates.status = status;
-
-    // Check if at least one field is provided
-    if (Object.keys(updates).length === 0) {
-      setMessage('Please provide at least one field to update!');
-      return;
-    }
-
-    try {
-      // Call the API to update the allocation
-      const response = await updateAssetAllocation(allocationId, updates);
-      setMessage(response);
-
-      // Clear form fields
-      setAllocationId('');
-      setEmployeeId('');
-      setReturnedDate('');
-      setStatus('');
-
-      // Refresh allocations
-      const data = await getAllAllocations();
-      setAllocations(data);
-    } catch (error) {
-      setMessage('Failed to update allocation. Please try again.');
-    }
+    const updates = { status };
+    const response = await updateAssetAllocation(allocationId, updates);
+    setMessage(response);
+    setAllocationId('');
+    setStatus('');
+    // Refresh allocations
+    const data = await getAllAllocations();
+    setAllocations(data);
   };
 
   return (
@@ -123,17 +100,20 @@ const AssetAllocation = () => {
         {showAllocateForm && (
           <div className="card-body">
             <form onSubmit={handleAllocateAsset}>
+              {/* Barcode Input */}
               <div className="mb-3">
-                <label htmlFor="assetId" className="form-label">Asset ID</label>
+                <label htmlFor="barcode" className="form-label">Barcode</label>
                 <input
-                  type="number"
+                  type="text"
                   className="form-control"
-                  id="assetId"
-                  value={assetId}
-                  onChange={(e) => setAssetId(e.target.value)}
+                  id="barcode"
+                  value={barcode}
+                  onChange={(e) => setBarcode(e.target.value)}
                   required
                 />
               </div>
+
+              {/* Employee ID */}
               <div className="mb-3">
                 <label htmlFor="employeeId" className="form-label">Employee ID</label>
                 <input
@@ -145,6 +125,8 @@ const AssetAllocation = () => {
                   required
                 />
               </div>
+
+              {/* User ID */}
               <div className="mb-3">
                 <label htmlFor="userId" className="form-label">User ID</label>
                 <input
@@ -156,6 +138,7 @@ const AssetAllocation = () => {
                   required
                 />
               </div>
+
               <button type="submit" className="btn btn-primary">Allocate Asset</button>
             </form>
           </div>
@@ -275,33 +258,41 @@ const AssetAllocation = () => {
 
       {/* Display Allocations Table */}
       <div className="card">
-        <div className="card-header">All Asset Allocations</div>
-        <div className="card-body">
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>Allocation ID</th>
-                <th>Asset ID</th>
-                <th>Employee ID</th>
-                <th>Status</th>
-                <th>Allocated Date</th>
-                <th>Returned Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {allocations.map((allocation) => (
-                <tr key={allocation.allocationId}>
-                  <td>{allocation.allocationId}</td>
-                  <td>{allocation.asset ? allocation.asset.assetId : "N/A"}</td>
-                  <td>{allocation.employee ? allocation.employee.employeeId : "N/A"}</td>
-                  <td>{allocation.status}</td>
-                  <td>{new Date(allocation.allocatedDate).toLocaleDateString()}</td>
-                  <td>{allocation.returnedDate ? new Date(allocation.returnedDate).toLocaleDateString() : 'N/A'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div
+          className="card-header"
+          onClick={() => setShowAllocationsTable(!showAllocationsTable)}
+          style={{ cursor: 'pointer' }}
+        >
+          All Asset Allocations {showAllocationsTable ? '▲' : '▼'}
         </div>
+        {showAllocationsTable && (
+          <div className="card-body">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>Allocation ID</th>
+                  <th>Asset ID</th>
+                  <th>Employee ID</th>
+                  <th>Status</th>
+                  <th>Allocated Date</th>
+                  <th>Returned Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allocations.map((allocation) => (
+                  <tr key={allocation.allocationId}>
+                    <td>{allocation.allocationId}</td>
+                    <td>{allocation.asset ? allocation.asset.assetId : "N/A"}</td>
+                    <td>{allocation.employee ? allocation.employee.employeeId : "N/A"}</td>
+                    <td>{allocation.status}</td>
+                    <td>{new Date(allocation.allocatedDate).toLocaleDateString()}</td>
+                    <td>{allocation.returnedDate ? new Date(allocation.returnedDate).toLocaleDateString() : 'N/A'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
