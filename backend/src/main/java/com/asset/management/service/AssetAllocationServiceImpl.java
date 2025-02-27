@@ -158,5 +158,22 @@ public class AssetAllocationServiceImpl implements AssetAllocationService {
         return "Asset successfully allocated!";
     }
 
+    @Override
+    public String allocateAssetByBarcode(String barcode, Long employeeId, Long userId) {
+        System.out.println("Received barcode: " + barcode);
+        Optional<Long> assetIdOptional = allocationRepository.findAssetIdByBarcode(barcode);
+        if (assetIdOptional.isEmpty()) {
+            System.out.println("No asset found for barcode: " + barcode);
+            return "No asset found for the given barcode!";
+        }
+
+        Long assetId = assetIdOptional.get();
+        System.out.println("Found assetId: " + assetId);
+        Long activeAllocations = allocationRepository.countActiveAllocationsByAssetId(assetId);
+        if (activeAllocations > 0) {
+            return "Asset is already assigned to another employee!";
+        }
+        return allocateAsset(assetId, employeeId, userId); // Reusing existing method
+    }
 
 }

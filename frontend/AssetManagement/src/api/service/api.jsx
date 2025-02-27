@@ -44,3 +44,19 @@ export const allocateAsset = async (assetId, employeeId, userId) => {
     });
     return response.data;
 };
+
+export const allocateAssetByBarcode = async (barcode, employeeId, userId) => {
+    console.log("here i service ",barcode,employeeId,userId);
+    try {
+        const response = await axios.post(`${API_URL}/allocate-by-barcode`, {
+            barcode,
+            employeeId,
+            userId,
+        });
+        console.log("✅ Allocation successful:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("❌ Allocation failed:", error.response?.data || error.message);
+        throw error;
+    }
+};

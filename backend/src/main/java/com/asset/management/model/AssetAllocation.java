@@ -17,7 +17,7 @@ public class AssetAllocation {
 
     @ManyToOne
     @JoinColumn(name = "asset_id", nullable = false)
-    @JsonIgnoreProperties({"name", "image", "barcode", "purchasedDate", "invoicePath", "hardwareDetails", "softwareDetails"})
+    @JsonIgnoreProperties({"name", "image", "purchasedDate", "invoicePath", "hardwareDetails", "softwareDetails"})
 //    @JsonIgnoreProperties({"vendor","warrantyStartDate","warrantyRenewalDate","name", "image", "barcode", "purchasedDate", "invoicePath", "hardwareDetails", "softwareDetails"})
     private AssetRegistration asset;
 

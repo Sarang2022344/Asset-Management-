@@ -73,4 +73,17 @@ public class AssetAllocationController {
 
         return assetAllocationService.allocateAsset(assetId, employeeId, userId);
     }
+
+    @PostMapping("/allocate-by-barcode")
+    public String allocateAssetByBarcode(@RequestBody Map<String, Object> request) {
+        String barcode = (String) request.get("barcode");
+        Long employeeId = Long.valueOf(request.get("employeeId").toString());
+        Long userId = Long.valueOf(request.get("userId").toString());
+
+        if (barcode == null || employeeId == null || userId == null) {
+            return "Missing required parameters!";
+        }
+
+        return assetAllocationService.allocateAssetByBarcode(barcode, employeeId, userId);
+    }
 }
