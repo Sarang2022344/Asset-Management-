@@ -21,5 +21,4 @@ public interface AssetAllocationRepository extends JpaRepository<AssetAllocation
     Optional<Long> findAssetIdByBarcode(@Param("barcode") String barcode);
     @Query("SELECT COUNT(a) FROM AssetAllocation a WHERE a.asset.assetId = :assetId AND a.status = 'Assigned'")
     Long countActiveAllocationsByAssetId(@Param("assetId") Long assetId);
-//    Optional<AssetAllocation> findByEmployee_EmployeeIdAndAsset_Category(Long employeeId, String assetCategory);
 }

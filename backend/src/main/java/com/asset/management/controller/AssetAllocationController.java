@@ -36,7 +36,7 @@ public class AssetAllocationController {
     public String returnAsset(@RequestBody Map<String, Object> request) {
         Long allocationId = Long.valueOf(request.get("allocationId").toString());
         LocalDate returnedDate = LocalDate.parse(request.get("returnedDate").toString());
-//        String reason = (String) request.get("reason");
+
 
         return assetAllocationService.returnAsset(allocationId, returnedDate/*, reason*/);
     }
