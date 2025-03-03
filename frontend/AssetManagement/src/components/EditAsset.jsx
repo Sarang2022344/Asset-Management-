@@ -54,17 +54,17 @@ const EditAssetForm = ({ assetId, onClose, refreshAssets }) => {
 
       <Form.Group className="mb-3">
         <Form.Label>Vendor</Form.Label>
-        <Form.Control type="text" name="vendor" value={formData.vendor} onChange={handleInputChange} required />
+        <Form.Control type="text" name="vendor" value={formData.vendor} onChange={handleInputChange} />
       </Form.Group>
 
       <Form.Group className="mb-3">
         <Form.Label>Price</Form.Label>
-        <Form.Control type="number" name="price" value={formData.price} onChange={handleInputChange} required />
+        <Form.Control type="number" name="price" value={formData.price} onChange={handleInputChange}  />
       </Form.Group>
 
       <Form.Group className="mb-3">
         <Form.Label>Status</Form.Label>
-        <Form.Control type="text" name="status" value={formData.status} onChange={handleInputChange} required />
+        <Form.Control type="text" name="status" value={formData.status} onChange={handleInputChange}  />
       </Form.Group>
 
       <Button variant="primary" type="submit">Update Asset</Button>

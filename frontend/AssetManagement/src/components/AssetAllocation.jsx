@@ -46,6 +46,8 @@ const AssetAllocation = () => {
     } catch (error) {
       setMessage('Failed to allocate asset. Please try again.');
     }
+    const data = await getAllAllocations();
+    setAllocations(data);
   };
 
   // Handle asset return

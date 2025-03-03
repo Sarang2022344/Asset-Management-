@@ -1,14 +1,23 @@
+const API_BASE_URL = import.meta.env.VITE_APP_API_URL;
 import React, { useState, useEffect } from "react";
 import "./AssetDisposal.css";
 import Sidebar from "./Sidebar";
 import AssetDisposalService from "../api/service/AssetDisposal";
 import AddAssetDisposalForm from "../components/AddAssetDisposalForm";
 import EditAssetDisposalForm from "../components/Editdisposal";
+import axios from "axios";
+
 
 const AssetDisposal = () => {
   const [tableData, setTableData] = useState([]);
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [isFilterPopupOpen, setIsFilterPopupOpen] = useState(false);
+  const [isFilteredPopupOpen, setIsFilteredPopupOpen] = useState(false);
+
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
   const [formData, setFormData] = useState({
     assetId: '',
     companyId: '',
@@ -29,6 +38,11 @@ const AssetDisposal = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const handleFilterButtonClick = () => {
+    setIsFilterPopupOpen(true);
+    console.log("Filter popup opened:", isFilterPopupOpen); // Debugging state update
   };
 
   const handleAdd = () => {
@@ -59,9 +73,8 @@ const AssetDisposal = () => {
     e.preventDefault();
     try {
       const newDisposal = await AssetDisposalService.addDisposal(formData);
-      // Fetch the asset details
-      const assetResponse = await axios.get(`${ASSET_API_URL}/get/${newDisposal.assetId}`);
-      const assetData = assetResponse.data;
+      const assetResponse = await axios.get(`${API_BASE_URL}/api/registration/get/${newDisposal.assetId}`);
+    const assetData = assetResponse.data;
       // Add the assetName to the newDisposal object
       const disposalWithAssetName = {
         ...newDisposal,
@@ -72,6 +85,7 @@ const AssetDisposal = () => {
     } catch (error) {
       console.error("Error adding disposal:", error);
     }
+    alert("Asset Disposed succesfully");
   };
 
 
@@ -100,6 +114,137 @@ const AssetDisposal = () => {
     setIsEditFormOpen(false);
   };
 
+  const handleFilterApply = async () => {
+    try {
+      console.log("Applying filter for dates:", startDate, endDate); // Debugging input
+  
+      const response = await axios.get(`${API_BASE_URL}/disposal/range`, {
+        params: { startDate, endDate },
+      });
+  
+      console.log("Filtered data received:", response.data); // Debugging API response
+  
+      // Fetch asset names for each asset ID in the filtered data
+      const updatedFilteredData = await Promise.all(
+        response.data.map(async (disposal) => {
+          try {
+            const assetResponse = await axios.get(`${API_BASE_URL}/api/registration/get/${disposal.assetId}`);
+            const assetData = assetResponse.data;
+            console.log("Asset Response:", assetResponse.data);
+  
+            return {
+              ...disposal,
+              assetName: assetData.name || "Unknown",
+            };
+          } catch (error) {
+            console.error(`Error fetching asset name for ID ${disposal.assetId}:`, error);
+            return { ...disposal, assetName: "Unknown" };
+          }
+        })
+      );
+  
+      console.log("Updated Filtered Data with Asset Names:", updatedFilteredData);
+  
+      setFilteredData(updatedFilteredData);
+      setIsFilteredPopupOpen(true);
+      setIsFilterPopupOpen(false);
+  
+    } catch (error) {
+      console.error("Error fetching filtered data:", error.response?.data || error.message);
+      alert("Error fetching filtered data. Please check the console.");
+    }
+  };
+
+
+  const FilterPopup = ({ isOpen, onClose, onApply, startDate, setStartDate, endDate, setEndDate }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="popup-form-overlay">
+        <div className="popup-form">
+          <h2>Filter by Date Range</h2>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onApply();
+            }}
+          >
+            <div className="form-group">
+              <label>Start Date</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>End Date</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-buttons">
+              <button type="submit">Apply</button>
+              <button type="button" onClick={onClose}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  };
+
+  const FilteredDataPopup = ({ isOpen, onClose, filteredData }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="popup-form-overlay">
+        <div className="popup-form">
+          <h2>Filtered Asset Disposal Data</h2>
+          <div className="table-container">
+            <table className="asset-disposal-table">
+              <thead>
+                <tr>
+                  <th>Sr</th>
+                  <th>Asset Name</th>
+                  <th>Reason</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredData.length > 0 ? (
+                  filteredData.map((row) => (
+                    <tr key={row.disposalId}>
+                      <td>{row.disposalId}</td>
+                      <td>{row.assetName}</td>
+                      <td>{row.reason}</td>
+                      <td>{row.disposalDate}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4">No records found</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className="form-buttons">
+            <button type="button" onClick={onClose}>
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+);
+};
+  
+
   return (
     <div className="page-container">
       <Sidebar />
@@ -109,7 +254,7 @@ const AssetDisposal = () => {
             <input type="text" placeholder="Search..." />
           </div>
           <div className="filter-button">
-            <button>Filter</button>
+          <button onClick={handleFilterButtonClick}>Filter</button>
           </div>
           <div className="add-asset-button">
             <button onClick={handleAdd}>Add Asset for Disposal</button>
@@ -172,6 +317,23 @@ const AssetDisposal = () => {
           handleClose={handleClose}
         />
       )}
+      {/* Filter Popup */}
+      <FilterPopup
+       isOpen={isFilterPopupOpen}
+       onClose={() => setIsFilterPopupOpen(false)}
+       onApply={handleFilterApply}
+       startDate={startDate}
+       setStartDate={setStartDate}
+       endDate={endDate}
+       setEndDate={setEndDate}
+     />
+
+     {/* Filtered Data Popup */}
+     <FilteredDataPopup
+  isOpen={isFilteredPopupOpen}
+  onClose={() => setIsFilteredPopupOpen(false)}
+  filteredData={filteredData}
+/>
     </div>
   );
 };
