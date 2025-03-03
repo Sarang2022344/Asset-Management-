@@ -9,9 +9,8 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.List;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.asset.management")
 public class AssetManagementApplication  {
-
 	public static void main(String[] args) {
 		SpringApplication.run(AssetManagementApplication.class, args);
 

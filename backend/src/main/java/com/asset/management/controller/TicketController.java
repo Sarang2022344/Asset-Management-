@@ -12,8 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("tickets")
-
+@RequestMapping("/tickets")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TicketController {
     private final TicketService ticketService;
 
@@ -32,10 +32,10 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.raiseTicket(employeeId, assetName, issueDescription, issueImageUrl));
     }
 
-    @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<List<TicketDTO>> getTickets(@PathVariable Long employeeId) {
-        return ResponseEntity.ok(ticketService.getTicketsByEmployee(employeeId));
-    }
+//    @GetMapping("/employee/{employeeId}")
+//    public ResponseEntity<List<TicketDTO>> getTickets(@PathVariable Long employeeId) {
+//        return ResponseEntity.ok(ticketService.getTicketsByEmployee(employeeId));
+//    }
 
     @GetMapping("/{ticketId}")
     public ResponseEntity<TicketDTO> getTicket(@PathVariable Long ticketId) {
@@ -45,6 +45,12 @@ public class TicketController {
     @GetMapping("/all")
     public ResponseEntity<List<TicketDTO>> getAllTickets() {
         return ResponseEntity.ok(ticketService.getAllTickets());
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<TicketDTO>> getTicketsByEmployee(@PathVariable Long employeeId) {
+        List<TicketDTO> tickets = ticketService.getTicketsByEmployee(employeeId);
+        return ResponseEntity.ok(tickets);
     }
 
 }
