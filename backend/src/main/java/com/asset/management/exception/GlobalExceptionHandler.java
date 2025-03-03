@@ -46,10 +46,7 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-//    @ExceptionHandler(CSVProcessingException.class)
-//    public ResponseEntity<Map<String, Object>> handleCSVProcessingException(CSVProcessingException ex) {
-//        return buildErrorResponse("Error processing CSV: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
-//    }
+
 
     @ExceptionHandler(CSVProcessingException.class)
     public ResponseEntity<Map<String, Object>> handleCSVProcessingException(CSVProcessingException ex) {

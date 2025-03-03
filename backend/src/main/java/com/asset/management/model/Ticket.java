@@ -2,10 +2,6 @@ package com.asset.management.model;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -22,9 +18,7 @@ public class Ticket {
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee raisedBy;
 
-//    @ManyToOne
-//    @JoinColumn(name = "asset_id", nullable = true)
-//    private AssetRegistration asset;
+
 
 
     private Long assetId;

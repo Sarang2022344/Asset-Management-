@@ -1,9 +1,9 @@
 package com.asset.management.dto;
 
 import com.asset.management.model.Ticket;
-import lombok.AllArgsConstructor;
+
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -20,7 +20,7 @@ public class TicketDTO {
 
     private Long assetId;
 
-//    private AssetRegistrationDTO asset;
+
 
     public TicketDTO(Ticket ticket) {
         this.ticketId = ticket.getId();

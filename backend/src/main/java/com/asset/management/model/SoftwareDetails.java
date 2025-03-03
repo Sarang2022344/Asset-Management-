@@ -59,13 +59,6 @@ public class SoftwareDetails{
         this.supportedos = supportedos;
     }
 
-    public String getVesion() {
-        return Version;
-    }
-
-    public void setVesion(String vesion) {
-        Version = vesion;
-    }
 
     public List<String> getLicenses() {
         return licenses;
