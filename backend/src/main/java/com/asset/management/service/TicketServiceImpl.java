@@ -1,20 +1,18 @@
 package com.asset.management.service;
 
-import com.asset.management.dto.AssetDTO;
+
 import com.asset.management.dto.TicketDTO;
 
-import com.asset.management.exception.NoAssignedAssetsException;
 
 import com.asset.management.model.AssetAllocation;
 import com.asset.management.model.Employee;
 import com.asset.management.model.Ticket;
-import com.asset.management.repository.AssetAllocationRepository;
+
 import com.asset.management.repository.EmployeeRepository;
 import com.asset.management.repository.TicketRepository;
 
 import com.asset.management.util.FileStorageService;
 
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +28,7 @@ private final AssetAllocationService assetAllocationService;
     private final FileStorageService fileStorageService;
 
 
-    public TicketServiceImpl(TicketRepository ticketRepository, EmployeeRepository employeeRepository, AssetAllocationRepository assetAllocationRepository, AssetAllocationService assetAllocationService, FileStorageService fileStorageService) {
+    public TicketServiceImpl(TicketRepository ticketRepository, EmployeeRepository employeeRepository, AssetAllocationService assetAllocationService, FileStorageService fileStorageService) {
         this.ticketRepository = ticketRepository;
         this.employeeRepository = employeeRepository;
         this.assetAllocationService = assetAllocationService;

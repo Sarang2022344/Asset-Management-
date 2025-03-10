@@ -44,7 +44,7 @@ public class AssetRegistrationAllTest extends BaseTest {
 
     }
 
-    // **🔹 Navigate to Asset Registration Page**
+    // Navigate to Asset Registration Page
     void navigateToAssetRegistration() {
         driver.get("http://localhost:5173");
 
@@ -64,7 +64,7 @@ public class AssetRegistrationAllTest extends BaseTest {
         wait.until(ExpectedConditions.urlContains("asset-registration"));
     }
 
-    // **🔹 Register an Asset**
+    //  Register an Asset
     void registerAsset(String name, String companyId, String category, String serialNumber, String specifications,
                        String brand, String type, String vendor, String price, String status,  boolean expectSuccess) {
         WebElement registerAssetButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Add Asset')]")));
@@ -104,7 +104,7 @@ public class AssetRegistrationAllTest extends BaseTest {
         }
     }
 
-    // ** Handle Alerts**
+    // Handle Alerts
     void handleAlert(String expectedText) {
         try {
             Alert alert = wait.until(ExpectedConditions.alertIsPresent());
@@ -116,13 +116,13 @@ public class AssetRegistrationAllTest extends BaseTest {
         }
     }
 
-    // **🔹 Verify Asset in Table**
+    // Verify Asset in Table
     void verifyAssetInTable(String assetName) {
         WebElement assetTable = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table")));
         assertTrue(assetTable.getText().contains(assetName));
     }
 
-    // **🔹 Verify Error Messages**
+    //  Verify Error Messages
     void verifyErrorMessage(String expectedError) {
         WebElement errorMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("text-danger")));
         assertTrue(errorMsg.getText().contains(expectedError));
