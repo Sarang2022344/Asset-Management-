@@ -21,6 +21,11 @@ public class AssetRegistrationTest extends BaseTest {
         WebElement loginButton = driver.findElement(By.className("login-btn"));
 
         emailInput.sendKeys("admin@example.com");
+        try {
+            Thread.sleep(700); // Small delay before clicking
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         passwordInput.sendKeys("anypassword");
         loginButton.click();
 
@@ -56,12 +61,42 @@ public class AssetRegistrationTest extends BaseTest {
         WebElement status = driver.findElement(By.name("status"));
         WebElement submitButton = driver.findElement(By.xpath("//button[contains(text(),'Submit')]"));
 
-        assetName.sendKeys("Computer");
+        assetName.sendKeys("Lenovo ES");
+        try {
+            Thread.sleep(700); // Small delay before clicking
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         companyId.sendKeys("1");
+        try {
+            Thread.sleep(700); // Small delay before clicking
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         category.sendKeys("Hardware");
+        try {
+            Thread.sleep(700); // Small delay before clicking
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         vendor.sendKeys("Tech Supplier");
+        try {
+            Thread.sleep(700); // Small delay before clicking
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         price.sendKeys("75000");
+        try {
+            Thread.sleep(700); // Small delay before clicking
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         status.sendKeys("Available");
+        try {
+            Thread.sleep(700); // Small delay before clicking
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         submitButton.click();
 
         // Step 8: Handle Alert Popup (Asset Added Successfully)
@@ -72,11 +107,15 @@ public class AssetRegistrationTest extends BaseTest {
         } catch (Exception e) {
             System.out.println("No alert found.");
         }
+        try {
+            Thread.sleep(700); // Small delay before clicking
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // Step 9: Verify Asset in Table
         WebElement assetTable = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table")));
         assertTrue(assetTable.getText().contains("Laptop"));
     }
-
-
 }
+

@@ -3,9 +3,9 @@ package com.asset.management.service;
 import com.asset.management.dto.AssetDTO;
 import com.asset.management.exception.AssetNotFoundException;
 import com.asset.management.exception.InvalidAssetException;
-import com.asset.management.exception.ResourceNotFoundException;
+
 import com.asset.management.model.AssetRegistration;
-import com.asset.management.model.Category;
+
 import com.asset.management.repository.AssetRegistrationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

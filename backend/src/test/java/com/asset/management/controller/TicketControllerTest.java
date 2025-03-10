@@ -2,7 +2,7 @@ package com.asset.management.controller;
 
 import com.asset.management.dto.TicketDTO;
 import com.asset.management.service.TicketService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class TicketControllerTest {
+ class TicketControllerTest {
 
     private MockMvc mockMvc;
 
@@ -29,13 +29,13 @@ public class TicketControllerTest {
     @InjectMocks
     private TicketController ticketController;
 
-    private ObjectMapper objectMapper;
+
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(ticketController).build();
-        objectMapper = new ObjectMapper();
+
     }
 
     @Test

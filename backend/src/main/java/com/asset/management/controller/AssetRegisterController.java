@@ -3,7 +3,7 @@ package com.asset.management.controller;
 import com.asset.management.dto.AssetDTO;
 import com.asset.management.model.AssetRegistration;
 import com.asset.management.service.AssetRegistrationServiceImpl;
-import com.asset.management.service.CategoryServiceImpl;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,11 +14,11 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/registration")
 public class AssetRegisterController {
-private final CategoryServiceImpl categoryService;
+
 private final AssetRegistrationServiceImpl asssetRegistration;
 
-    public AssetRegisterController(CategoryServiceImpl categoryService, AssetRegistrationServiceImpl asssetRegistration) {
-        this.categoryService = categoryService;
+    public AssetRegisterController( AssetRegistrationServiceImpl asssetRegistration) {
+
         this.asssetRegistration = asssetRegistration;
     }
 

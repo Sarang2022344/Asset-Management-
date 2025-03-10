@@ -1,5 +1,6 @@
 package com.asset.management.util;
 
+import com.asset.management.exception.CSVProcessingException;
 import com.asset.management.model.AssetRegistration;
 import com.asset.management.model.HardwareDetails;
 import org.apache.commons.csv.CSVFormat;
@@ -20,34 +21,53 @@ public class CSVHelper {
     public static String TYPE = "text/csv";
 
     public static boolean hasCSVFormat(MultipartFile file) {
-        return TYPE.equals(file.getContentType()) || file.getOriginalFilename().endsWith(".csv");
+        if (file == null || file.getContentType() == null) {
+            return false;
+        }
+
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null) {
+            return false;
+        }
+        return TYPE.equals(file.getContentType()) ||
+                (originalFilename.toLowerCase().endsWith(".csv"));
     }
 
+
     public static List<AssetRegistration> csvToAssets(InputStreamReader inputStreamReader) {
+        if (inputStreamReader == null) {
+            throw new CSVProcessingException("Input stream is null");
+        }
+
         try (BufferedReader fileReader = new BufferedReader(inputStreamReader);
-             CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim())) {
+             CSVParser csvParser = new CSVParser(fileReader,
+                     CSVFormat.DEFAULT.builder()
+                             .setHeader()
+                             .setIgnoreHeaderCase(true)
+                             .setTrim(true)
+                             .build())) {
 
             List<AssetRegistration> assets = new ArrayList<>();
 
-            for (CSVRecord record : csvParser) {
+            for (CSVRecord csvRecord : csvParser) {
                 AssetRegistration asset = new AssetRegistration();
-                asset.setName(record.get("name"));
-                asset.setVendor(record.get("vendor"));
-                asset.setPrice(Double.parseDouble(record.get("price")));
-                asset.setStatus(record.get("status"));
+                asset.setName(csvRecord.get("name"));
+                asset.setVendor(csvRecord.get("vendor"));
+                asset.setPrice(Double.parseDouble(csvRecord.get("price")));
+                asset.setStatus(csvRecord.get("status"));
 
                 asset.setBarcode("ASSET-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
 
-                asset.setPurchasedDate(LocalDate.parse(record.get("purchasedDate")));
-                asset.setWarrantyStartDate(LocalDate.parse(record.get("warrantyStartDate")));
-                asset.setWarrantyRenewalDate(LocalDate.parse(record.get("warrantyRenewalDate")));
+                asset.setPurchasedDate(LocalDate.parse(csvRecord.get("purchasedDate")));
+                asset.setWarrantyStartDate(LocalDate.parse(csvRecord.get("warrantyStartDate")));
+                asset.setWarrantyRenewalDate(LocalDate.parse(csvRecord.get("warrantyRenewalDate")));
 
-                if (record.get("categoryType").equalsIgnoreCase("Hardware")) {
+                if (csvRecord.get("categoryType").equalsIgnoreCase("Hardware")) {
                     HardwareDetails hardwareDetails = new HardwareDetails();
-                    hardwareDetails.setSerialNumber(record.get("serialNumber"));
-                    hardwareDetails.setSpecifications(record.get("specifications"));
-                    hardwareDetails.setBrand(record.get("brand"));
-                    hardwareDetails.setType(record.get("type"));
+                    hardwareDetails.setSerialNumber(csvRecord.get("serialNumber"));
+                    hardwareDetails.setSpecifications(csvRecord.get("specifications"));
+                    hardwareDetails.setBrand(csvRecord.get("brand"));
+                    hardwareDetails.setType(csvRecord.get("type"));
                     asset.setHardwareDetails(hardwareDetails);
                 }
 
@@ -57,7 +77,8 @@ public class CSVHelper {
             return assets;
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to parse CSV file: " + e.getMessage());
+            throw new CSVProcessingException("Failed to parse CSV file: " + e.getMessage());
         }
     }
+
 }

@@ -4,7 +4,7 @@ import com.asset.management.dto.AssetDTO;
 import com.asset.management.model.AssetRegistration;
 import com.asset.management.service.AssetRegistrationServiceImpl;
 import com.asset.management.service.CategoryServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class AssetRegistrationControllerTest {
+ class AssetRegistrationControllerTest {
 
     private MockMvc mockMvc;
 
@@ -34,13 +34,13 @@ public class AssetRegistrationControllerTest {
     @InjectMocks
     private AssetRegisterController assetRegisterController;
 
-    private ObjectMapper objectMapper;
+
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(assetRegisterController).build();
-        objectMapper = new ObjectMapper();
+
     }
 
     @Test
