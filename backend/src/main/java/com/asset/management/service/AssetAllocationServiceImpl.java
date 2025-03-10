@@ -44,15 +44,6 @@ public class AssetAllocationServiceImpl implements AssetAllocationService {
 
         AssetAllocation allocation = allocationOptional.get();
 
-        // Update asset if provided
-//        if (updates.containsKey("assetId")) {
-//            Long assetId = Long.valueOf(updates.get("assetId").toString());
-//            Optional<AssetRegistration> assetOptional = assetRepository.findById(assetId);
-//            if (assetOptional.isEmpty()) {
-//                return "Asset not found!";
-//            }
-//            allocation.setAsset(assetOptional.get());
-//        }
 
         // Update employee if provided
         if (updates.containsKey("employeeId")) {
@@ -72,10 +63,6 @@ public class AssetAllocationServiceImpl implements AssetAllocationService {
             allocation.setReturnedDate(LocalDate.parse(updates.get("returnedDate").toString()));
         }
 
-        // Update reason if provided
-//        if (updates.containsKey("reason")) {
-//            allocation.setReason(updates.get("reason").toString());
-//        }
 
         // Save the updated allocation
         allocationRepository.save(allocation);
@@ -93,7 +80,7 @@ public class AssetAllocationServiceImpl implements AssetAllocationService {
     }
 
 
-    public String returnAsset(Long allocationId, LocalDate returnedDate/*, String reason*/) {
+    public String returnAsset(Long allocationId, LocalDate returnedDate) {
         Optional<AssetAllocation> allocationOptional = allocationRepository.findById(allocationId);
         if (allocationOptional.isEmpty()) {
             return "Allocation record not found!";
@@ -110,7 +97,7 @@ public class AssetAllocationServiceImpl implements AssetAllocationService {
 
         allocation.setStatus("Returned");
         allocation.setReturnedDate(returnedDate);
-//        allocation.setReason(reason);
+
         allocationRepository.save(allocation);
 
         return "Asset successfully returned.";

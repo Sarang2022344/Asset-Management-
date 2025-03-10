@@ -2,7 +2,7 @@ package com.asset.management.service;
 
 import com.asset.management.dto.AssetDTO;
 import com.asset.management.model.AssetRegistration;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
