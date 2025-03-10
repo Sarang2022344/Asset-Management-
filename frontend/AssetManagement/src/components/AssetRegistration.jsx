@@ -83,7 +83,7 @@ const handleEditClick = (id) => {
             assets.map((asset, index) => (
               <tr key={asset.assetId}>
                 {console.log("assetid , index ",asset,index)}  
-                <td>{index + 1}</td>
+                <td>{index+1}</td>
                 <td>{asset.name}</td>
                 <td>{asset.categoryType || "N/A"}</td>
                 <td>{asset.status}</td>

@@ -56,7 +56,37 @@ const AddAssetForm = ({ onClose, refreshAssets }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+  
+    console.log("Form submitted! Name value:", formData.name);
+    // Validation Regex for Name (Only Letters & Spaces Allowed)
+    const nameRegex = /^[A-Za-z\s-]+$/;
+  
+    if (!formData.name.trim()) {
+      alert("Name is required.");
+      return;
+    }
+    if (!nameRegex.test(formData.name)) {
+      alert("Name should not contain numbers or special characters (except - or space).");
+      return;
+    }
+    if (!formData.companyId.trim()) {
+      alert("Company ID is required.");
+      return;
+    }
+    if (!formData.vendor.trim()) {
+      alert("Vendor is required.");
+      return;
+    }
+    if (!formData.status.trim()) {
+      alert("Status is required.");
+      return;
+    }
+    if (!formData.price || isNaN(formData.price) || formData.price <= 0) {
+      alert("Price must be a positive number.");
+      return;
+    }
+  
+    // Proceed with form submission
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
       if (key === "imageFiles" || key === "licenses") {
@@ -65,16 +95,18 @@ const AddAssetForm = ({ onClose, refreshAssets }) => {
         data.append(key, formData[key]);
       }
     });
-
+  
     try {
       await RegistrationService.createAsset(data);
       alert("Asset added successfully!");
-      refreshAssets(); 
-      onClose(); 
+      refreshAssets();
+      onClose();
     } catch (error) {
       console.error("Error adding asset:", error);
     }
   };
+  
+  
 
   return (
     <Form onSubmit={handleSubmit}>

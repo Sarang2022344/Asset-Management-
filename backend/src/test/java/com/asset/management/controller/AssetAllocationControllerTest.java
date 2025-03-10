@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AssetAllocationControllerTest {
+ class AssetAllocationControllerTest {
 
     private MockMvc mockMvc;
 
