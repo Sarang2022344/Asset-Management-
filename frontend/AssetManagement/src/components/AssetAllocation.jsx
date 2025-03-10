@@ -33,21 +33,46 @@ const AssetAllocation = () => {
 
   const handleAllocateAsset = async (e) => {
     e.preventDefault();
+  
+    // Validation: Ensure all fields are filled
     if (!barcode || !employeeId || !userId) {
-      setMessage('Please fill all fields!');
+      setMessage('❌ Please fill all fields!');
       return;
     }
+  
+    // Validation: Ensure Employee ID and User ID are positive numbers
+    if (employeeId <= 0 || userId <= 0) {
+      setMessage('❌ Employee ID and User ID must be greater than zero!');
+      return;
+    }
+  
+    // Validation: Check if Asset is already allocated
+    const isAlreadyAllocated = allocations.some(
+      (allocation) => allocation.asset?.assetId === barcode && allocation.status === 'Assigned'
+    );
+    if (isAlreadyAllocated) {
+      setMessage('⚠️ This asset is already allocated to another user!');
+      return;
+    }
+  
     try {
       const response = await allocateAssetByBarcode(barcode, employeeId, userId);
-      setMessage(response);
+      setMessage(`✅ ${response}`);
+  
+      // Clear inputs on success
       setBarcode('');
       setEmployeeId('');
       setUserId('');
+  
+      // Fetch latest allocation data
+      const data = await getAllAllocations();
+      setAllocations(data);
     } catch (error) {
-      setMessage('Failed to allocate asset. Please try again.');
+      setMessage(' Failed to allocate asset. Please try again.');
     }
-    const data = await getAllAllocations();
-    setAllocations(data);
+  
+    // Auto-clear message after 3 seconds
+    setTimeout(() => setMessage(''), 3000);
   };
 
   // Handle asset return

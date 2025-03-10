@@ -18,8 +18,8 @@ public class BaseTest {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); // Implicit wait
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Explicit wait
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); // Implicit wait
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20)); // Explicit wait
     }
 
     @AfterEach

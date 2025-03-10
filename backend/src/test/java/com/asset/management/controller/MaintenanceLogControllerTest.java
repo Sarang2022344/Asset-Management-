@@ -2,7 +2,7 @@ package com.asset.management.controller;
 
 import com.asset.management.dto.MaintenanceLogDTO;
 import com.asset.management.service.MaintenanceLogService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class MaintenanceLogControllerTest {
+ class MaintenanceLogControllerTest {
 
     private MockMvc mockMvc;
 
@@ -29,13 +29,13 @@ public class MaintenanceLogControllerTest {
     @InjectMocks
     private MaintenanceLogController maintenanceLogController;
 
-    private ObjectMapper objectMapper;
+
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(maintenanceLogController).build();
-        objectMapper = new ObjectMapper();
+
     }
 
     @Test
