@@ -70,22 +70,25 @@ const AssetDisposal = () => {
   
 
   const handleAddSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     try {
       const newDisposal = await AssetDisposalService.addDisposal(formData);
       const assetResponse = await axios.get(`${API_BASE_URL}/api/registration/get/${newDisposal.assetId}`);
-    const assetData = assetResponse.data;
+      const assetData = assetResponse.data;
+  
       // Add the assetName to the newDisposal object
       const disposalWithAssetName = {
         ...newDisposal,
         assetName: assetData.name || "Unknown",
       };
+  
       setTableData([...tableData, disposalWithAssetName]);
       setIsAddFormOpen(false);
+      alert("Asset Disposed successfully");
     } catch (error) {
       console.error("Error adding disposal:", error);
+      // alert("Asset is already disposed"); // Display the error message from the backend
     }
-    alert("Asset Disposed succesfully");
   };
 
 
@@ -103,6 +106,7 @@ const AssetDisposal = () => {
         )
       );
       setIsEditFormOpen(false);
+      alert("Asset Edit Successfully");
     } catch (error) {
       console.error("Error updating disposal:", error);
     }
@@ -307,7 +311,7 @@ const AssetDisposal = () => {
         handleClose={handleClose}
         formData={formData}
         handleInputChange={handleInputChange}
-        handleSubmit={handleAddSubmit}
+        handleSubmit={(e) => handleAddSubmit(e)}
       />
       {isEditFormOpen && (
         <EditAssetDisposalForm

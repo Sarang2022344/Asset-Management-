@@ -1,11 +1,8 @@
 package com.asset.management.dto;
 
 import com.asset.management.model.Ticket;
-
 import lombok.Getter;
-
 import lombok.Setter;
-
 import java.time.LocalDate;
 
 

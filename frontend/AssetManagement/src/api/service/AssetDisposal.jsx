@@ -8,13 +8,28 @@ class AssetDisposalService {
   
   async addDisposal(disposalData) {
     try {
-      const response = await axios.post(`${API_BASE_URL}/disposal`, disposalData);
-      console.log("Add Disposal Data : ",disposalData);
+      // Check if the asset is already disposed
+      const existingDisposal = await this.getDisposalByAssetId(disposalData.assetId);
+      if (existingDisposal) {
+        throw new Error("Asset is already disposed.");
+      }
   
+      // If not disposed, add the new disposal
+      const response = await axios.post(`${API_BASE_URL}/disposal`, disposalData);
       return response.data;
     } catch (error) {
       console.error("Error adding disposal:", error);
       throw error;
+    }
+  }
+  
+  async getDisposalByAssetId(assetId) {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/disposal/asset/${assetId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching disposal by asset ID:", error);
+      return null;
     }
   }
   

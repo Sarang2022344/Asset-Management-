@@ -36,7 +36,7 @@ const AssetMaintenance = () => {
   const handleAddLog = async (e) => {
     e.preventDefault();
     try {
-      const assetResponse = await axios.get("http://localhost:8080/api/registration/all");
+      const assetResponse = await axios.get("http://localhost:8080/maintenanceLog/logs");
       const unallocatedAssets = assetResponse.data;
 
       if (!unallocatedAssets.some(asset => asset.id === log.assetId)) {
