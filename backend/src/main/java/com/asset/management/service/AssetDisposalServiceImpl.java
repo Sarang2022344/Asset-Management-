@@ -10,7 +10,6 @@ import com.asset.management.repository.AssetDisposalRepository;
 import com.asset.management.repository.AssetRegistrationRepository;
 import com.asset.management.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;

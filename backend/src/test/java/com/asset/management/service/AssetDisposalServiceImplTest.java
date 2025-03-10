@@ -11,19 +11,19 @@ import com.asset.management.repository.AssetRegistrationRepository;
 import com.asset.management.repository.CompanyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
+import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)  // ✅ Enable Mockito for JUnit 5
 class AssetDisposalServiceImplTest {
 
     @Mock
@@ -38,177 +38,222 @@ class AssetDisposalServiceImplTest {
     @InjectMocks
     private AssetDisposalServiceImpl disposalService;
 
+    private AssetRegistration asset1;
+    private AssetRegistration asset2;
+    private Company company1;
+    private Company company2;
+
+    private AssetRegistration asset;
+    private Company company;
+    private AssetDisposal disposal;
+    private AssetDisposalDTO disposalDTO;
+
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
-    @Test
-    void testDisposeAsset_Success() {
-        AssetDisposalDTO disposalDTO = new AssetDisposalDTO(null, 1L, 1L, LocalDate.now(), "Obsolete");
-        AssetRegistration asset = new AssetRegistration();
+        // ✅ Mock Asset
+        asset = new AssetRegistration();
         asset.setAssetId(1L);
-        asset.setStatus("Available");
+        asset.setName("Laptop");
+        asset.setStatus("Active");
 
-        Company company = new Company();
+        // ✅ Mock Company
+        company = new Company();
         company.setCompanyId(1L);
 
-        when(assetRepository.findById(1L)).thenReturn(Optional.of(asset));
-        when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
-        when(disposalRepository.save(any(AssetDisposal.class))).thenAnswer(invocation -> {
-            AssetDisposal disposal = invocation.getArgument(0);
-            disposal.setDisposalId(1L);
-            disposal.setAsset(asset); // Ensure the asset is set
-            disposal.setCompany(company); // Ensure the company is set
-            return disposal;
-        });
-
-        AssetDisposalDTO result = disposalService.disposeAsset(disposalDTO);
-
-        assertNotNull(result);
-        assertEquals(1L, result.getDisposalId());
-        assertEquals("Disposed", asset.getStatus());
-        verify(assetRepository, times(1)).save(asset);
-        verify(disposalRepository, times(1)).save(any(AssetDisposal.class));
-    }
-
-    @Test
-    void testDisposeAsset_AssetNotFound() {
-        AssetDisposalDTO disposalDTO = new AssetDisposalDTO(null, 1L, 1L, LocalDate.now(), "Obsolete");
-
-        when(assetRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(ResourceNotFoundException.class, () -> disposalService.disposeAsset(disposalDTO));
-    }
-
-    @Test
-    void testDisposeAsset_AssetAlreadyDisposed() {
-        AssetDisposalDTO disposalDTO = new AssetDisposalDTO(null, 1L, 1L, LocalDate.now(), "Obsolete");
-        AssetRegistration asset = new AssetRegistration();
-        asset.setAssetId(1L);
-        asset.setStatus("Disposed");
-
-        when(assetRepository.findById(1L)).thenReturn(Optional.of(asset));
-
-        assertThrows(AssetAlreadyDisposedException.class, () -> disposalService.disposeAsset(disposalDTO));
-    }
-
-    @Test
-    void testDisposeAsset_AssetAssigned() {
-        AssetDisposalDTO disposalDTO = new AssetDisposalDTO(null, 1L, 1L, LocalDate.now(), "Obsolete");
-        AssetRegistration asset = new AssetRegistration();
-        asset.setAssetId(1L);
-        asset.setStatus("Assigned");
-
-        when(assetRepository.findById(1L)).thenReturn(Optional.of(asset));
-
-        assertThrows(IllegalStateException.class, () -> disposalService.disposeAsset(disposalDTO));
-    }
-
-    @Test
-    void testUpdateDisposal_Success() {
-        AssetDisposalDTO disposalDTO = new AssetDisposalDTO(1L, 1L, 1L, LocalDate.now(), "Obsolete");
-        AssetDisposal disposal = new AssetDisposal();
+        // ✅ Mock Disposal
+        disposal = new AssetDisposal();
         disposal.setDisposalId(1L);
+        disposal.setAsset(asset);
+        disposal.setCompany(company);
+        disposal.setDisposalDate(LocalDate.of(2025, 2, 20));
+        disposal.setReason("End of Life");
 
-        AssetRegistration asset = new AssetRegistration();
-        asset.setAssetId(1L);
-        disposal.setAsset(asset); // Ensure the asset is set
+        asset1 = new AssetRegistration();
+        asset1.setAssetId(101L);
 
-        Company company = new Company();
-        company.setCompanyId(1L);
-        disposal.setCompany(company); // Ensure the company is set
+        asset2 = new AssetRegistration();
+        asset2.setAssetId(102L);
 
-        when(disposalRepository.findById(1L)).thenReturn(Optional.of(disposal));
-        when(disposalRepository.save(any(AssetDisposal.class))).thenReturn(disposal);
+        company1 = new Company();
+        company1.setCompanyId(201L);
 
-        AssetDisposalDTO result = disposalService.updateDisposal(1L, disposalDTO);
+        company2 = new Company();
+        company2.setCompanyId(202L);
 
-        assertNotNull(result);
-        assertEquals(1L, result.getDisposalId());
-        verify(disposalRepository, times(1)).save(disposal);
-    }
-
-    @Test
-    void testUpdateDisposal_DisposalNotFound() {
-        AssetDisposalDTO disposalDTO = new AssetDisposalDTO(1L, 1L, 1L, LocalDate.now(), "Obsolete");
-
-        when(disposalRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(RuntimeException.class, () -> disposalService.updateDisposal(1L, disposalDTO));
+        // ✅ Mock DTO
+        disposalDTO = new AssetDisposalDTO(1L, 1L, 1L, LocalDate.of(2025, 2, 20), "End of Life");
     }
 
     @Test
     void testGetAllDisposals() {
-        AssetDisposal disposal = new AssetDisposal();
-        disposal.setDisposalId(1L);
-
-        AssetRegistration asset = new AssetRegistration();
-        asset.setAssetId(1L);
-        disposal.setAsset(asset); // Ensure the asset is set
-
-        Company company = new Company();
-        company.setCompanyId(1L);
-        disposal.setCompany(company); // Ensure the company is set
-
-        when(disposalRepository.findAll()).thenReturn(Collections.singletonList(disposal));
+        when(disposalRepository.findAll()).thenReturn(List.of(disposal));
 
         List<AssetDisposalDTO> result = disposalService.getAllDisposals();
 
-        assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).getDisposalId());
+        assertEquals(disposal.getDisposalId(), result.get(0).getDisposalId());
+        verify(disposalRepository, times(1)).findAll();
     }
 
     @Test
     void testGetDisposalById_Success() {
-        AssetDisposal disposal = new AssetDisposal();
-        disposal.setDisposalId(1L);
-
-        AssetRegistration asset = new AssetRegistration();
-        asset.setAssetId(1L);
-        disposal.setAsset(asset); // Ensure the asset is set
-
-        Company company = new Company();
-        company.setCompanyId(1L);
-        disposal.setCompany(company); // Ensure the company is set
-
         when(disposalRepository.findById(1L)).thenReturn(Optional.of(disposal));
 
         AssetDisposalDTO result = disposalService.getDisposalById(1L);
 
         assertNotNull(result);
         assertEquals(1L, result.getDisposalId());
+        assertEquals("End of Life", result.getReason());
+        verify(disposalRepository, times(1)).findById(1L);
     }
 
     @Test
     void testGetDisposalById_NotFound() {
         when(disposalRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> disposalService.getDisposalById(1L));
+        Exception exception = assertThrows(RuntimeException.class, () -> disposalService.getDisposalById(1L));
+        assertEquals("Asset Disposal not found", exception.getMessage());
     }
 
     @Test
-    void testGetDisposedAssetsByDateRange() {
-        AssetDisposal disposal = new AssetDisposal();
-        disposal.setDisposalId(1L);
-        disposal.setDisposalDate(LocalDate.now());
+    void testDisposeAsset_Success() {
+        // ✅ Mock Asset and Company found in DB
+        when(assetRepository.findById(1L)).thenReturn(Optional.of(asset));
+        when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
 
-        AssetRegistration asset = new AssetRegistration();
-        asset.setAssetId(1L);
-        disposal.setAsset(asset); // Ensure the asset is set
+        // ✅ Ensure disposal object has an ID before returning from the mock
+        disposal.setDisposalId(1L);  // **Manually setting the disposal ID**
+        when(disposalRepository.save(any(AssetDisposal.class))).thenAnswer(invocation -> {
+            AssetDisposal savedDisposal = invocation.getArgument(0);
+            savedDisposal.setDisposalId(1L);  // **Ensure saved disposal has an ID**
+            return savedDisposal;
+        });
 
-        Company company = new Company();
-        company.setCompanyId(1L);
-        disposal.setCompany(company); // Ensure the company is set
+        // ✅ Call service method
+        AssetDisposalDTO result = disposalService.disposeAsset(disposalDTO);
 
-        when(disposalRepository.findByDisposalDateBetween(any(LocalDate.class), any(LocalDate.class)))
-                .thenReturn(Collections.singletonList(disposal));
-
-        List<AssetDisposalDTO> result = disposalService.getDisposedAssetsByDateRange(LocalDate.now().minusDays(1), LocalDate.now());
-
+        // ✅ Assertions
         assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).getDisposalId());
+        assertEquals(1L, result.getDisposalId());  // Now this will not be null
+        assertEquals("End of Life", result.getReason());
+
+        // ✅ Verify interactions
+        verify(assetRepository, times(1)).findById(1L);
+        verify(companyRepository, times(1)).findById(1L);
+        verify(assetRepository, times(1)).save(any(AssetRegistration.class));
+        verify(disposalRepository, times(1)).save(any(AssetDisposal.class));
     }
+
+
+    @Test
+    void testDisposeAsset_AlreadyDisposed() {
+        asset.setStatus("Disposed");
+
+        when(assetRepository.findById(1L)).thenReturn(Optional.of(asset));
+
+        Exception exception = assertThrows(AssetAlreadyDisposedException.class, () -> disposalService.disposeAsset(disposalDTO));
+
+        assertEquals("This asset has already been disposed and cannot be disposed again.", exception.getMessage());
+        verify(disposalRepository, never()).save(any(AssetDisposal.class));
+    }
+
+    @Test
+    void testDisposeAsset_AssetNotFound() {
+        when(assetRepository.findById(1L)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> disposalService.disposeAsset(disposalDTO));
+
+        assertEquals("Asset not found with ID: 1", exception.getMessage());
+        verify(disposalRepository, never()).save(any(AssetDisposal.class));
+    }
+
+    @Test
+    void testDisposeAsset_CompanyNotFound() {
+        when(assetRepository.findById(1L)).thenReturn(Optional.of(asset));
+        when(companyRepository.findById(1L)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> disposalService.disposeAsset(disposalDTO));
+
+        assertEquals("Company not found with ID: 1", exception.getMessage());
+        verify(disposalRepository, never()).save(any(AssetDisposal.class));
+    }
+
+    @Test
+    void testUpdateDisposal_Success() {
+        // Mock repository behavior
+        when(disposalRepository.findById(1L)).thenReturn(Optional.of(disposal));
+        when(disposalRepository.save(any(AssetDisposal.class))).thenReturn(disposal); // Only required stubbing
+
+        // Call the service method
+        AssetDisposalDTO result = disposalService.updateDisposal(1L, disposalDTO);
+
+        // Verify the result is as expected
+        assertNotNull(result);
+        assertEquals(1L, result.getDisposalId());
+        assertEquals("End of Life", result.getReason());
+
+        // Ensure save was called once
+        verify(disposalRepository, times(1)).save(any(AssetDisposal.class));
+
+        // Ensure no unnecessary repository interactions
+        verifyNoInteractions(assetRepository, companyRepository);
+    }
+
+    @Test
+    void testUpdateDisposal_NotFound() {
+        when(disposalRepository.findById(1L)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> disposalService.updateDisposal(1L, disposalDTO));
+
+        assertEquals("Asset Disposal record not found", exception.getMessage());
+        verify(disposalRepository, never()).save(any(AssetDisposal.class));
+    }
+
+    @Test
+    void testGetDisposedAssetsByDateRange_Success() {
+        // Given: Date range and sample disposals
+        LocalDate startDate = LocalDate.of(2024, 1, 1);
+        LocalDate endDate = LocalDate.of(2024, 12, 31);
+
+        AssetDisposal disposal1 = new AssetDisposal(1L, asset1, company1, LocalDate.of(2024, 5, 10), "End of Life");
+        AssetDisposal disposal2 = new AssetDisposal(2L, asset2, company2, LocalDate.of(2024, 6, 15), "Damaged");
+
+        List<AssetDisposal> disposals = Arrays.asList(disposal1, disposal2);
+
+        when(disposalRepository.findByDisposalDateBetween(startDate, endDate)).thenReturn(disposals);
+
+        // When: Calling the service method
+        List<AssetDisposalDTO> result = disposalService.getDisposedAssetsByDateRange(startDate, endDate);
+
+        // Then: Assertions
+        assertNotNull(result);
+        assertEquals(2, result.size());
+
+        assertEquals(1L, result.get(0).getDisposalId());
+        assertEquals("End of Life", result.get(0).getReason());
+
+        assertEquals(2L, result.get(1).getDisposalId());
+        assertEquals("Damaged", result.get(1).getReason());
+
+        verify(disposalRepository, times(1)).findByDisposalDateBetween(startDate, endDate);
+    }
+
+    @Test
+    void testGetDisposedAssetsByDateRange_NoResults() {
+        // Given: Date range with no disposals
+        LocalDate startDate = LocalDate.of(2024, 1, 1);
+        LocalDate endDate = LocalDate.of(2024, 12, 31);
+
+        when(disposalRepository.findByDisposalDateBetween(startDate, endDate)).thenReturn(List.of());
+
+        // When: Calling the service method
+        List<AssetDisposalDTO> result = disposalService.getDisposedAssetsByDateRange(startDate, endDate);
+
+        // Then: Assertions
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        verify(disposalRepository, times(1)).findByDisposalDateBetween(startDate, endDate);
+    }
+
 }

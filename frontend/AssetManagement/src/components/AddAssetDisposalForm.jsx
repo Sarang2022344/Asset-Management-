@@ -1,16 +1,53 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 
 const AddAssetDisposalForm = ({ isAddFormOpen, handleClose, formData, handleInputChange, handleSubmit }) => {
-  // List of reasons for the dropdown
+  const [errors, setErrors] = useState({});
   const reasons = ["Obsolete", "Damaged", "End of Life", "Upgrade", "Other"];
 
-  if (!isAddFormOpen) return null; 
+  if (!isAddFormOpen) return null;
+
+  // 🔹 Validation before submitting
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!formData.assetId.match(/^[0-9]+$/)) {
+      newErrors.assetId = "Asset ID must be a number!";
+    }
+    if (!formData.companyId.match(/^[0-9]+$/)) {
+      newErrors.companyId = "Company ID must be a number!";
+    }
+    if (!formData.reason) {
+      newErrors.reason = "Please select a reason!";
+    }
+    if (!formData.date) {
+      newErrors.date = "Please select a valid date!";
+    } else {
+      const selectedDate = new Date(formData.date);
+      const today = new Date();
+      if (selectedDate < today.setHours(0, 0, 0, 0)) {
+        newErrors.date = "Date cannot be in the past!";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // ✅ Return `true` if no errors
+  };
+
+  // 🔹 Handle Submit with Validation
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      handleSubmit();
+    }
+  };
 
   return (
     <div className="popup-form-overlay">
       <div className="popup-form">
         <h2>Add Asset Disposal</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => handleFormSubmit(e)}>
+
           {/* Asset ID Field */}
           <div className="form-group">
             <label>Asset ID</label>
@@ -21,6 +58,7 @@ const AddAssetDisposalForm = ({ isAddFormOpen, handleClose, formData, handleInpu
               onChange={handleInputChange}
               required
             />
+            {errors.assetId && <span className="error-text">{errors.assetId}</span>}
           </div>
 
           {/* Company ID Field */}
@@ -33,6 +71,7 @@ const AddAssetDisposalForm = ({ isAddFormOpen, handleClose, formData, handleInpu
               onChange={handleInputChange}
               required
             />
+            {errors.companyId && <span className="error-text">{errors.companyId}</span>}
           </div>
 
           {/* Reason Dropdown */}
@@ -44,13 +83,14 @@ const AddAssetDisposalForm = ({ isAddFormOpen, handleClose, formData, handleInpu
               onChange={handleInputChange}
               required
             >
-              <option value="">Select a reason</option>
+              <option value="" disabled>Select a reason</option>
               {reasons.map((reason, index) => (
                 <option key={index} value={reason}>
                   {reason}
                 </option>
               ))}
             </select>
+            {errors.reason && <span className="error-text">{errors.reason}</span>}
           </div>
 
           {/* Date Field */}
@@ -63,14 +103,13 @@ const AddAssetDisposalForm = ({ isAddFormOpen, handleClose, formData, handleInpu
               onChange={handleInputChange}
               required
             />
+            {errors.date && <span className="error-text">{errors.date}</span>}
           </div>
 
           {/* Buttons */}
           <div className="form-buttons">
             <button type="submit">Submit</button>
-            <button type="button" onClick={handleClose}>
-              Cancel
-            </button>
+            <button type="button" onClick={handleClose}>Cancel</button>
           </div>
         </form>
       </div>
