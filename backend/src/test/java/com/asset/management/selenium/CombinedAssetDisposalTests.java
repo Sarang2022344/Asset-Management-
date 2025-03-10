@@ -99,11 +99,11 @@ public class CombinedAssetDisposalTests{
         try {
             Select reasonDropdown = new Select(reason);
             reasonDropdown.selectByVisibleText("Obsolete");
-            System.out.println("✅ Selected reason from dropdown: Obsolete");
+            System.out.println("Selected reason from dropdown: Obsolete");
         } catch (UnexpectedTagNameException e) {
             reason.clear();
             reason.sendKeys("Damaged beyond repair");
-            System.out.println("✅ Entered reason in text field: Damaged beyond repair");
+            System.out.println("Entered reason in text field: Damaged beyond repair");
         }
 
         submitButton.click();
@@ -115,16 +115,16 @@ public class CombinedAssetDisposalTests{
             boolean errorDisplayed = false;
             for (WebElement error : errorMessages) {
                 if (error.isDisplayed()) {
-                    System.out.println("✅ Found validation error: " + error.getText());
+                    System.out.println("Found validation error: " + error.getText());
                     errorDisplayed = true;
                 }
             }
 
-            assertTrue(errorDisplayed, "❌ No validation messages found!");
-            System.out.println("✅ At least one validation message is displayed correctly!");
+            assertTrue(errorDisplayed, "No validation messages found!");
+            System.out.println("At least one validation message is displayed correctly!");
 
         } catch (NoSuchElementException e) {
-            fail("❌ No validation messages found!");
+            fail("No validation messages found!");
         }
 
         // 🔹 Step 4: Close the Form
@@ -132,7 +132,7 @@ public class CombinedAssetDisposalTests{
 
         try {
             WebElement cancelButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(text(),'Cancel')]")));
-            System.out.println("✅ Cancel button found!");
+            System.out.println("Cancel button found!");
 
             // Ensure Cancel button is visible and clickable
             wait.until(ExpectedConditions.visibilityOf(cancelButton));
@@ -145,17 +145,17 @@ public class CombinedAssetDisposalTests{
             try {
                 Actions actions = new Actions(driver);
                 actions.moveToElement(cancelButton).click().perform();
-                System.out.println("✅ Cancel button clicked using Actions!");
+                System.out.println("Cancel button clicked using Actions!");
             } catch (ElementClickInterceptedException e) {
                 // Fallback to JavaScript click
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", cancelButton);
-                System.out.println("✅ Cancel button clicked using JavaScript!");
+                System.out.println("Cancel button clicked using JavaScript!");
             }
 
         } catch (TimeoutException e) {
-            fail("❌ Timeout: Cancel button not found in time! Check if it exists in the DOM.");
+            fail("Timeout: Cancel button not found in time! Check if it exists in the DOM.");
         } catch (NoSuchElementException e) {
-            fail("❌ Cancel button does not exist in the DOM!");
+            fail("Cancel button does not exist in the DOM!");
         }
     }
 
@@ -164,19 +164,19 @@ public class CombinedAssetDisposalTests{
         // 🔹 Step 1: Wait for the overlay to disappear
         try {
             wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='popup-form-overlay']")));
-            System.out.println("✅ Overlay is no longer present.");
+            System.out.println("Overlay is no longer present.");
         } catch (TimeoutException e) {
-            System.out.println("⚠️ Overlay did not disappear. Proceeding with JavaScript click.");
+            System.out.println("Overlay did not disappear. Proceeding with JavaScript click.");
         }
 
         // 🔹 Step 2: Click "Add Asset for Disposal" button using JavaScript
         WebElement addDisposalButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(text(),'Add Asset for Disposal')]")));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addDisposalButton);
-        System.out.println("✅ 'Add Asset for Disposal' button clicked using JavaScript.");
+        System.out.println("'Add Asset for Disposal' button clicked using JavaScript.");
 
         // 🔹 Step 3: Wait for the popup form to appear
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("popup-form")));
-        System.out.println("✅ Popup form is visible.");
+        System.out.println("Popup form is visible.");
 
         // 🔹 Step 4: Fill in the form
         WebElement assetId = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("assetId")));
@@ -194,7 +194,7 @@ public class CombinedAssetDisposalTests{
         disposalDate.sendKeys("21-03-2025");
         Thread.sleep(1000);
         submitButton.click();
-        System.out.println("✅ Form submitted.");
+        System.out.println("Form submitted.");
 
         // 🔹 Step 5: Handle Alert for First Disposal
         try {
@@ -203,27 +203,27 @@ public class CombinedAssetDisposalTests{
             System.out.println("First Disposal Alert: " + alert.getText());
             alert.accept();
         } catch (TimeoutException e) {
-            System.out.println("🚨 Alert not found. Checking if the table updated.");
+            System.out.println("Alert not found. Checking if the table updated.");
 
             // If no alert appears, verify disposal was recorded in the table
             WebElement table = driver.findElement(By.xpath("//table/tbody"));
             if (!table.getText().contains("End of Life")) {
-                fail("❌ First disposal success alert not found and asset disposal was not recorded in the table!");
+                fail("First disposal success alert not found and asset disposal was not recorded in the table!");
             }
         }
 
         // 🔹 Step 6: Ensure Popup Form is Closed
         try {
             wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("popup-form")));
-            System.out.println("✅ Popup form is closed.");
+            System.out.println("Popup form is closed.");
         } catch (TimeoutException e) {
-            System.out.println("⚠️ Popup form did not close properly. Attempting to close manually.");
+            System.out.println("Popup form did not close properly. Attempting to close manually.");
             try {
                 WebElement closeButton = driver.findElement(By.xpath("//button[contains(text(),'Cancel')]"));
                 closeButton.click();
-                System.out.println("✅ Form closed manually.");
+                System.out.println("Form closed manually.");
             } catch (NoSuchElementException ex) {
-                System.out.println("⚠️ Close button not found. Form might have closed automatically.");
+                System.out.println("Close button not found. Form might have closed automatically.");
             }
         }
 
@@ -238,13 +238,13 @@ public class CombinedAssetDisposalTests{
                 break;
             }
         }
-        assertTrue(isAdded, "❌ Newly added disposal 'End of Life' not found in the table!");
-        System.out.println("✅ Disposal entry found in the table.");
+        assertTrue(isAdded, "Newly added disposal 'End of Life' not found in the table!");
+        System.out.println("Disposal entry found in the table.");
 
         // 🔹 Step 8: Attempt to Add the Same Asset Again
         addDisposalButton.click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("popup-form")));
-        System.out.println("✅ Popup form is visible again.");
+        System.out.println("Popup form is visible again.");
 
         assetId = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("assetId")));
         companyId = driver.findElement(By.name("companyId"));
@@ -253,15 +253,15 @@ public class CombinedAssetDisposalTests{
         submitButton = driver.findElement(By.xpath("//button[contains(text(),'Submit')]"));
 
         assetId.sendKeys("8"); // Using the same Asset ID again
-        System.out.println("✅ Asset ID entered again.");
+        System.out.println("Asset ID entered again.");
         companyId.sendKeys("1");
-        System.out.println("✅ Company ID entered again.");
+        System.out.println("Company ID entered again.");
         new Select(reason).selectByVisibleText("Upgrade");
-        System.out.println("✅ Reason selected again.");
+        System.out.println("Reason selected again.");
         disposalDate.sendKeys("5-03-2025");
-        System.out.println("✅ Disposal date entered again.");
+        System.out.println("Disposal date entered again.");
         submitButton.click();
-        System.out.println("✅ Form submitted again.");
+        System.out.println("Form submitted again.");
 
         // 🔹 Step 9: Verify Error Message for Duplicate Disposal
         try {
@@ -269,19 +269,19 @@ public class CombinedAssetDisposalTests{
             Alert alert = wait.until(ExpectedConditions.alertIsPresent());
             String alertText = alert.getText();
             System.out.println("Duplicate Disposal Alert: " + alertText);
-            assertTrue(alertText.contains("Asset is already disposed"), "❌ Expected error message not found!");
+            assertTrue(alertText.contains("Asset is already disposed"), "Expected error message not found!");
             alert.accept();
         } catch (TimeoutException e) {
             // Check for error message on the page if alert is not found
             try {
                 WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(),'Asset is already disposed')]")));
                 System.out.println("Duplicate Disposal Error Message: " + errorMessage.getText());
-                assertTrue(errorMessage.getText().contains("Asset is already disposed"), "❌ Expected error message not found!");
+                assertTrue(errorMessage.getText().contains("Asset is already disposed"), "Expected error message not found!");
             } catch (TimeoutException ex) {
-                fail("❌ Duplicate disposal error alert or message not found!");
+                fail("Duplicate disposal error alert or message not found!");
             }
         }
 
-        System.out.println("✅ Test Passed: System Prevents Duplicate Asset Disposal.");
+        System.out.println("Test Passed: System Prevents Duplicate Asset Disposal.");
     }
 }

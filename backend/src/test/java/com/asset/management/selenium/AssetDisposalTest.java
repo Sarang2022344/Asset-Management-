@@ -54,7 +54,7 @@ class AssetDisposalTest extends BaseTest {
         Thread.sleep(1000);
         new Select(reason).selectByVisibleText("End of Life");
         Thread.sleep(1000);
-        disposalDate.sendKeys("5-03-2025");
+        disposalDate.sendKeys("5-10-2025");
         Thread.sleep(1000);
         submitButton.click();
 
@@ -124,7 +124,7 @@ class AssetDisposalTest extends BaseTest {
         // Keep the browser open for manual verification
         Thread.sleep(5000);
 
-        System.out.println("✅ Test Passed: Asset Disposal Added & Edited Successfully");
+        System.out.println("Test Passed: Asset Disposal Added & Edited Successfully");
     }
 
 
