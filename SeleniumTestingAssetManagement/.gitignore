@@ -31,5 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-./project/frontend/AssetManagement/node_modules/*

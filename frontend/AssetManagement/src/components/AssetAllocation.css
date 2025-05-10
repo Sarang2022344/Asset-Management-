@@ -1,0 +1,190 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    width: 250px; /* Fixed width for the sidebar */
+    background-color: #333;
+    color: white;
+    height: 100vh;
+    position: fixed; /* Fix the sidebar to the left */
+    top: 0;
+    left: 0;
+    overflow-y: auto; /* Allow scrolling if content overflows */
+  }
+  
+  /* Main Content Styles */
+  .asset-allocation-container {
+    max-width: 1200px;
+    margin-left: 270px; /* Add margin to avoid overlapping with the sidebar */
+    padding: 20px;
+    transition: margin-left 0.3s ease; /* Smooth transition for sidebar toggle */
+  }
+  
+  h2 {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Card Styles */
+  .card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-header {
+    background-color: #3498db;
+    color: white;
+    padding: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .card-header:hover {
+    background-color: #2980b9;
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  /* Form Styles */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .form-label {
+    font-weight: bold;
+    color: #34495e;
+  }
+  
+  .form-control {
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-control:focus {
+    border-color: #3498db;
+    outline: none;
+  }
+  
+  .btn {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Table Styles */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+  }
+  
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Message Styles */
+  .alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+  }
+  
+  .alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+  }
+  
+  /* Collapsible Arrow */
+  .card-header::after {
+    content: '▼';
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .card-header.active::after {
+    content: '▲';
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+  
+    .asset-allocation-container {
+      margin-left: 0;
+      padding: 10px;
+    }
+  
+    .card-header {
+      font-size: 1rem;
+      padding: 10px;
+    }
+  
+    .form-control {
+      font-size: 0.9rem;
+    }
+  
+    .btn {
+      font-size: 0.9rem;
+      padding: 8px 16px;
+    }
+  
+    th, td {
+      padding: 8px;
+    }
+  }
